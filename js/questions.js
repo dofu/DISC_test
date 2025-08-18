@@ -53,7 +53,7 @@ const mapMost = [
   ['S','D','I',null],
   ['S',null,'D','C'],
   [null,'I','S',null],
-  [null,'S','D','C']
+  [null,'I','D','C']
 ];
 
 // Dual mappings for LEAST answers (null = *)
@@ -81,7 +81,7 @@ const mapLeast = [
   ['S','D','I','C'],
   ['S','I','D','C'],
   ['D',null,'S','C'],
-  ['I','S',null,null]
+  ['S','I',null,null]
 ];
 
 // DISC type descriptions

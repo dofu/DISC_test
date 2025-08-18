@@ -8,7 +8,7 @@ for(let i = 0; i < 24; i++) {
 }
 
 // DOM elements
-let startBtn, intro, quiz, results, backBtn, prevBtn, nextBtn, qwrap, bar, introErr, quizErr, downloadBtn, retakeBtn, testBtn, quizHeader;
+let startBtn, intro, quiz, results, backBtn, prevBtn, nextBtn, qwrap, bar, introErr, quizErr, downloadBtn, retakeBtn, quizHeader;
 
 // Initialize application
 function setDefaultDate() {
@@ -34,7 +34,7 @@ function initializeElements() {
   quizErr = document.getElementById('quizErr');
   downloadBtn = document.getElementById('downloadBtn');
   retakeBtn = document.getElementById('retakeBtn');
-  testBtn = document.getElementById('testBtn');
+  const manualTestBtn = document.getElementById('manualTestBtn');
   quizHeader = document.getElementById('quizHeader');
 
   // Event listeners
@@ -49,7 +49,7 @@ function initializeElements() {
   if(prevBtn) prevBtn.addEventListener('click', prevQuestion);
   if(nextBtn) nextBtn.addEventListener('click', nextQuestion);
   if(retakeBtn) retakeBtn.addEventListener('click', retakeQuiz);
-  if(testBtn) testBtn.addEventListener('click', runSampleTest);
+  if(manualTestBtn) manualTestBtn.addEventListener('click', runManualTest);
 }
 
 // Initialize when DOM is ready
@@ -443,16 +443,19 @@ function retakeQuiz() {
   hideErr('intro');
 }
 
-function runSampleTest() {
-  const sampleAnswers = [
+function runManualTest() {
+  // Based on the manual answer sheet provided - WITH ALL CORRECTIONS
+  const manualAnswers = [
     {most: 0, least: 2}, {most: 1, least: 2}, {most: 0, least: 1}, {most: 2, least: 3}, {most: 0, least: 3},
-    {most: 3, least: 2}, {most: 2, least: 1}, {most: 1, least: 2}, {most: 3, least: 0}, {most: 3, least: 0},
-    {most: 1, least: 0}, {most: 2, least: 0}, {most: 1, least: 0}, {most: 3, least: 0}, {most: 1, least: 0},
-    {most: 2, least: 3}, {most: 3, least: 0}, {most: 3, least: 0}, {most: 2, least: 0}, {most: 2, least: 3},
-    {most: 2, least: 0}, {most: 2, least: 0}, {most: 3, least: 1}, {most: 1, least: 3}
+    {most: 3, least: 2}, {most: 2, least: 1}, {most: 0, least: 1}, {most: 2, least: 3}, {most: 0, least: 3},
+    {most: 2, least: 1}, {most: 0, least: 2}, {most: 0, least: 2}, {most: 3, least: 0}, {most: 0, least: 3},
+    {most: 3, least: 2}, {most: 0, least: 3}, {most: 1, least: 2}, {most: 1, least: 2}, {most: 3, least: 2},
+    {most: 3, least: 2}, {most: 2, least: 3}, {most: 1, least: 3}, {most: 3, least: 1}
   ];
+  // Final corrections: Q6(3,2), Q11(2,1) + previous corrections
+  
   for(let i = 0; i < 24; i++) { 
-    answers[i] = sampleAnswers[i]; 
+    answers[i] = manualAnswers[i]; 
   }
   calculateResults();
 }
