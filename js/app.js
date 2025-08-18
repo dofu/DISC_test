@@ -121,7 +121,7 @@ function showResults(report) {
 
   if(naturalSummary) {
     naturalSummary.innerHTML = 
-      fullName(dom) + ': ' + descriptionText(dom) + ' <br><br>Visit <a href="https://www.discprofile.com/disc-styles" target="_blank" style="color: var(--brand); text-decoration: none; font-weight: 600;">discprofile.com/disc-styles</a> to learn more about your results.';
+      descriptionText(dom) + ' <br><br>Visit <a href="https://www.discprofile.com/disc-styles" target="_blank" style="color: var(--brand); text-decoration: none; font-weight: 600;">discprofile.com/disc-styles</a> to learn more about your results.';
   }
 
   // Build results table

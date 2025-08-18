@@ -87,10 +87,10 @@ const mapLeast = [
 // DISC type descriptions
 function fullName(k) {
   return {
-    'D': '<strong>Dominance</strong>',
-    'I': '<strong>Influence</strong>',
-    'S': '<strong>Steadiness</strong>',
-    'C': '<strong>Conscientiousness</strong>'
+    'D': '<span class="gradient-text">Dominance</span>',
+    'I': '<span class="gradient-text">Influence</span>',
+    'S': '<span class="gradient-text">Steadiness</span>',
+    'C': '<span class="gradient-text">Conscientiousness</span>'
   }[k] || k;
 }
 
