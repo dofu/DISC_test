@@ -8,18 +8,9 @@ for(let i = 0; i < 24; i++) {
 }
 
 // DOM elements
-let startBtn, intro, quiz, results, backBtn, prevBtn, nextBtn, qwrap, bar, introErr, quizErr, downloadBtn, retakeBtn, quizHeader;
+let startBtn, intro, quiz, results, backBtn, prevBtn, nextBtn, qwrap, bar, introErr, quizErr, downloadBtn, retakeBtn;
 
 // Initialize application
-function setDefaultDate() {
-  const dateEl = document.getElementById('date');
-  if(dateEl && !dateEl.value) {
-    const d = new Date(); 
-    dateEl.value = d.toISOString().slice(0,10);
-  }
-  if(dateEl) dateEl.disabled = true;
-}
-
 function initializeElements() {
   startBtn = document.getElementById('startBtn');
   intro = document.getElementById('intro');
@@ -35,7 +26,6 @@ function initializeElements() {
   downloadBtn = document.getElementById('downloadBtn');
   retakeBtn = document.getElementById('retakeBtn');
   const manualTestBtn = document.getElementById('manualTestBtn');
-  quizHeader = document.getElementById('quizHeader');
 
   // Event listeners
   if(startBtn) {
@@ -54,7 +44,6 @@ function initializeElements() {
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-  setDefaultDate();
   initializeElements();
   showIntro();
 });
@@ -98,10 +87,9 @@ function showResults(report) {
 
   const rawName = (document.getElementById('name') && document.getElementById('name').value.trim()) || '';
   const rawOrg = (document.getElementById('org') && document.getElementById('org').value.trim()) || '';
-  const rawDate = (document.getElementById('date') && document.getElementById('date').value.trim()) || '';
   const displayName = rawName !== '' ? rawName : 'Luke Skywalker';
   const displayOrg = rawOrg !== '' ? rawOrg : 'Jedi';
-  const displayDate = rawDate !== '' ? rawDate : new Date().toISOString().slice(0,10);
+  const displayDate = new Date().toISOString().slice(0,10);
 
   const order = ['D','I','S','C'];
   const dom = order.slice().sort((a,b) => report.c[b] - report.c[a])[0];
@@ -121,7 +109,7 @@ function showResults(report) {
 
   if(naturalSummary) {
     naturalSummary.innerHTML = 
-      descriptionText(dom) + ' <br><br>Visit <a href="https://www.discprofile.com/disc-styles" target="_blank" style="color: var(--brand); text-decoration: none; font-weight: 600;">discprofile.com/disc-styles</a> to learn more about your results.';
+      'Visit <a href="https://www.discprofile.com/disc-styles" target="_blank" style="color: var(--brand); text-decoration: none; font-weight: 600;">discprofile.com/disc-styles</a> to learn more about your DISC results and how to apply them in your work and relationships.';
   }
 
   // Build results table
@@ -193,20 +181,56 @@ function showResults(report) {
 
   // Setup PDF download
   if(downloadBtn) {
-    downloadBtn.onclick = () => {
-      const element = document.getElementById('report');
-      const fname = 'DISC_Report_' + sanitizeFilename(displayName || 'Anon') + '_' + displayDate + '.pdf';
-      const opt = {
-        margin: 10,
-        filename: fname,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
-      if(window.html2pdf) {
-        window.html2pdf().from(element).set(opt).save();
-      } else {
-        alert('PDF library not loaded. Please refresh and try again.');
+    downloadBtn.onclick = async () => {
+      try {
+        downloadBtn.disabled = true;
+        downloadBtn.textContent = 'Generating...';
+
+        const reportElement = document.getElementById('report');
+        if(!reportElement) throw new Error('No report section found');
+
+        // Show results section
+        if(quiz) quiz.classList.add('hidden');
+        if(intro) intro.classList.add('hidden');
+        if(results) results.classList.remove('hidden');
+
+        await new Promise(resolve => setTimeout(resolve, 200));
+
+        // Check if html2pdf is available
+        if (typeof window.html2pdf === 'undefined') {
+          setTimeout(() => window.print(), 500);
+          return;
+        }
+
+        const fname = 'DISC_Report_' + sanitizeFilename(displayName || 'User') + '_' + displayDate + '.pdf';
+        
+        const opt = {
+          margin: [10, 10, 10, 10],
+          filename: fname,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { 
+            scale: 2,
+            useCORS: true,
+            backgroundColor: '#ffffff',
+            logging: false,
+            letterRendering: true
+          },
+          jsPDF: { 
+            unit: 'mm', 
+            format: 'a4', 
+            orientation: 'portrait'
+          }
+        };
+
+        await window.html2pdf().set(opt).from(reportElement).save();
+
+      } catch(err) {
+        console.error('PDF generation error:', err);
+        setTimeout(() => window.print(), 1000);
+        
+      } finally {
+        downloadBtn.disabled = false;
+        downloadBtn.textContent = 'Download PDF';
       }
     };
   }
@@ -231,7 +255,7 @@ function renderQuestion(qIdx) {
   
   const header = document.createElement('div');
   header.className = 'qtitle';
-  header.textContent = 'Question ' + (qIdx + 1) + ' of 24 — pick ONE MOST and ONE LEAST';
+  header.textContent = 'Question ' + (qIdx + 1) + ' of 24 – pick ONE MOST and ONE LEAST';
   card.appendChild(header);
 
   const table = document.createElement('div');
@@ -410,7 +434,7 @@ function hideErr(target) {
 
 // Utility functions
 function sanitizeFilename(s) {
-  return (s || 'Anon').replace(/[^a-z0-9_\\-]+/gi, '_');
+  return (s || 'User').replace(/[^a-z0-9_\\-]+/gi, '_');
 }
 
 function retakeQuiz() {
@@ -421,10 +445,8 @@ function retakeQuiz() {
 
   const nameEl = document.getElementById('name');
   const orgEl = document.getElementById('org');
-  const dateEl = document.getElementById('date');
   if(nameEl) nameEl.value = '';
   if(orgEl) orgEl.value = '';
-  if(dateEl) dateEl.value = new Date().toISOString().slice(0,10);
 
   const rn = document.getElementById('resultName');
   const ro = document.getElementById('resultOrg');
@@ -444,7 +466,6 @@ function retakeQuiz() {
 }
 
 function runManualTest() {
-  // Based on the manual answer sheet provided - WITH ALL CORRECTIONS
   const manualAnswers = [
     {most: 0, least: 2}, {most: 1, least: 2}, {most: 0, least: 1}, {most: 2, least: 3}, {most: 0, least: 3},
     {most: 3, least: 2}, {most: 2, least: 1}, {most: 0, least: 1}, {most: 2, least: 3}, {most: 0, least: 3},
@@ -452,7 +473,6 @@ function runManualTest() {
     {most: 3, least: 2}, {most: 0, least: 3}, {most: 1, least: 2}, {most: 1, least: 2}, {most: 3, least: 2},
     {most: 3, least: 2}, {most: 2, least: 3}, {most: 1, least: 3}, {most: 3, least: 1}
   ];
-  // Final corrections: Q6(3,2), Q11(2,1) + previous corrections
   
   for(let i = 0; i < 24; i++) { 
     answers[i] = manualAnswers[i]; 
