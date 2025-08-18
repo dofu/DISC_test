@@ -1,0 +1,761 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>DISC — Dual Mapping (Fixed)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f8fafc; --card:#fff; --border:#e6eef6; --ink:#0f172a;
+    --muted:#64748b; --brand:#1DA1F2; --brand2:#1A91DA; --accent:#10B981;
+    --green-light:#e2fdd0; --green-bg:#f0f9e8; --red-light:#fef2f2; --red-border:#fca5a5; --red-text:#dc2626;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',Roboto,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+  .wrap{max-width:800px;margin:0 auto;padding:40px 24px}
+  .card{background:var(--card);border-radius:24px;overflow:hidden;box-shadow:none;border:none}
+  header{padding:18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+  header h1{font-size:1.15rem;margin:0}
+  .content{padding:18px}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .intro-section{max-width:600px;margin:0 auto;text-align:center}
+  .instructions{margin-bottom:48px}
+  .instructions h2{font-size:56px;margin:0 0 16px 0;color:var(--ink);font-weight:400;letter-spacing:-1px;line-height:1.1}
+  .instructions .gradient-text{background:linear-gradient(45deg,#4285f4,#34a853,#fbbc04,#ea4335);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200% 200%;animation:gradientShift 3s ease-in-out infinite}
+  @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+  .instructions p{color:var(--muted);line-height:1.6;margin:0;font-size:18px;max-width:500px;margin:0 auto}
+  .form-grid{display:grid;grid-template-columns:1fr;gap:20px;margin:32px 0}
+  label{display:block;margin-bottom:6px;color:var(--muted);font-size:0.95rem;text-align: left;}
+  input[type="text"], input[type="date"]{width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:#fff;font-family:inherit}
+  /* remove background from the intro text fields only (your request) */
+  #intro input[type="text"]{ background: transparent; font-size:16px; }
+
+  .help{color:var(--muted);margin-top:10px}
+  .tip{margin-top:12px;padding:10px;border-radius:10px;background:#e2fdd0;border:1px dashed var(--border);color:#334155;font-size: smaller;}
+  /* Changed: remove dashed border, make a subtle left accent for errors */
+  .error{margin-top:12px;padding:10px;border-radius:10px;background:#fef2f2;border:none;color:var(--red-text);font-size: smaller;}
+  .actions{margin-top:24px;display:flex;gap:8px;justify-content:flex-end}
+  button{padding:10px 14px;border-radius:999px;border:none;cursor:pointer;font-weight:700;font-family:inherit}
+  .primary{background:linear-gradient(90deg,var(--brand),var(--brand2));color:#fff;min-width:120px;max-width:300px}
+  .secondary{background:#f3f3f3;border:1px solid var(--border);min-width:80px}
+  .ghost{background:transparent;border:1px dashed var(--border)}
+  .footer{text-align:center;margin-top:32px;padding:20px;color:var(--muted);font-size:0.9rem}
+  .chevron{padding:8px 12px;min-width:40px;font-size:18px;flex-shrink:0}
+  .hidden{display:none !important}
+  .progress{height:6px;background:#eef6ff;border-radius:999px;overflow:hidden;margin:10px 0}
+  .bar{height:100%;background:linear-gradient(90deg,var(--brand),var(--brand2));width:0;transition:width .35s ease}
+  .qwrap{min-height:220px;position:relative;overflow:hidden;padding-top:8px}
+  .qcard{background:#fff;border:1px solid var(--border);padding:12px;border-radius:10px}
+  .qtitle{font-weight:700;margin-bottom:8px}
+  .sect{margin-top:10px}
+  .opts{display:grid;gap:8px;margin:10px 0}
+  .opt{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;border:1px solid var(--border);cursor:pointer;background:#fff}
+  .opt.selected{outline:2px solid var(--brand);background:var(--card)}
+  .nav{display:flex;justify-content:space-between;gap:12px;margin-top:14px}
+  .nav .primary{flex:1}
+  .results{padding:18px;border-radius:12px;background:#F0FDFA;border:1px solid var(--border);margin-top:12px}
+  .muted{color:var(--muted)}
+  .score-change{font-size:16px;font-weight:600;color:var(--ink)}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
+  .rcard{background:#fff;padding:12px;border-radius:10px;border:1px solid var(--border);text-align:center}
+  .rcard.dom{box-shadow:inset 0 0 0 2px var(--accent)}
+  .big{font-weight:800;font-size:1.6rem;margin-top:6px}
+
+  /* report-card styling (keeps feel consistent with your UI) */
+  .report-card{margin-top:8px;padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--card);display:block}
+  .report-card .field{margin-bottom:8px}
+  .report-card input[disabled]{background:#f8fafc;border:1px solid var(--border);padding:10px;border-radius:8px}
+
+  /* score table tidy + 16px base */
+  .score-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:1rem}
+  .score-table th,.score-table td{padding:10px;border:1px solid var(--border);text-align:center}
+  .score-table th:first-child,.score-table td:first-child{text-align:left;font-weight:700}
+  .score-table th{background:#f8fafc}
+
+  /* Make result action buttons larger and obvious (only inside results/report) */
+  #report button {
+    padding: 12px 20px;
+    font-size: 15px;
+    min-width: 150px;
+    border-radius: 12px;
+  }
+
+  @media (max-width:720px){ 
+    .wrap{padding:24px 16px}
+    .content{padding:32px}
+    .grid-2{grid-template-columns:1fr} 
+    .grid4{grid-template-columns:1fr 1fr}
+    .primary{min-width:120px;max-width:none}
+    .secondary{min-width:80px}
+    .intro-section{max-width:none}
+    .instructions h2{font-size:42px}
+    .instructions p{font-size:16px}
+    .form-grid{gap:20px;margin:32px 0}
+    input[type="text"], input[type="date"]{padding:14px 16px;font-size:16px}
+    button{padding:10px 20px;font-size:14px}
+    .chevron{padding:8px 12px}
+    .footer{margin-top:32px;padding:24px}
+    .score-grid{grid-template-columns:1fr 1fr}
+    .actions{justify-content:stretch;flex-direction:column-reverse}
+    .actions button{width:100%}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" role="application" aria-label="DISC quiz">
+      <div class="content">
+
+        <!-- Intro screen -->
+        <section id="intro">
+          <div class="intro-section">
+            <div class="instructions">
+              <h2>DISC Personality <span class="gradient-text">Assessment</span></h2>
+              <p>For each row, pick the statement that describes you the <strong>MOST</strong> and the one that describes you the <strong>LEAST</strong>. This assessment helps you understand your personality style and work preferences.</p>
+            </div>
+
+            <div class="form-grid">
+              
+              
+              <div class="grid-2">
+                <div>
+                <label for="name">Full Name</label>
+                <!-- user asked: remove bg colour from name textfield (done via CSS selector) -->
+                <input id="name" type="text" placeholder="Enter your full name" autocomplete="name" />
+              </div>
+
+                <div>
+                  <label for="org">Organisation</label>
+                  <input id="org" type="text" placeholder="Your Department" autocomplete="organization" />
+                </div>
+               
+              </div>
+            </div>
+
+            <!-- Intro-specific error -->
+            <div id="introErr" role="alert" class="error" style="display:none"></div>
+
+            <div class="tip">
+              <strong>Note:</strong> You can return to this screen later to edit your details — your quiz answers will be kept safe.
+            </div>
+
+            <div class="actions">
+              <button id="testBtn" class="secondary" type="button">Test with Sample Data</button>
+              <button id="startBtn" class="primary" type="button">Start Assessment</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Quiz screen -->
+        <section id="quiz" class="hidden" aria-hidden="true">
+          <!-- QUIZ HEADER restored -->
+          <h2 id="quizHeader" style="margin:0 0 12px 0;font-size:20px">Assessment — Questions</h2>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <button id="backBtn" class="secondary" type="button">Back to Intro</button>
+            <div style="flex:1;margin:0 12px">
+              <div class="progress">
+                <div id="bar" class="bar"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quiz-specific error -->
+          <div id="quizErr" role="alert" class="error" style="display:none"></div>
+
+          <div class="qwrap" id="qwrap"></div>
+
+          <div class="nav">
+            <button id="prevBtn" class="secondary chevron" type="button">‹</button>
+            <button id="nextBtn" class="primary" type="button">Next</button>
+          </div>
+        </section>
+
+        <!-- Results -->
+
+        <section id="results" class="hidden" aria-hidden="true">
+            
+          <div id="report">
+            <h2>DISC Personality Profile</h2>
+
+            <!-- keep 'who' for compatibility but we'll populate disabled fields for the report card -->
+            <div id="who" class="muted" style="margin-bottom:8px"></div>
+
+
+            <!-- report-card: disabled fields to show name/org/date (user requested) -->
+            <div class="report-card" aria-hidden="false">
+              <div class="field" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end">
+                <div>
+                  <label for="resultName" style="display:block;margin-bottom:6px;color:var(--muted);font-size:0.95rem">Full Name</label>
+                  <input id="resultName" type="text" disabled>
+                </div>
+                <div>
+                  <label for="resultOrg" style="display:block;margin-bottom:6px;color:var(--muted);font-size:0.95rem">Organisation</label>
+                  <input id="resultOrg" type="text" disabled>
+                </div>
+              </div>
+              <div class="field" style="margin-top:12px">
+                <label for="resultDate" style="display:block;margin-bottom:6px;color:var(--muted);font-size:0.95rem">Assessment Date</label>
+                <input id="resultDate" type="text" disabled>
+              </div>
+            </div>
+
+
+            <h3 id="domTitle" style="margin-top:12px"></h3>
+
+            
+            <div id="desc" style="margin-top:6px;display:none"></div>
+            
+            <!-- Single combined summary -->
+            <p id="naturalSummary" class="muted" style="margin-top:12px;"></p>
+
+            <div id="grid" class="score-grid" style="margin-top:12px"></div>
+            
+          <div class="actions">
+              <button id="downloadBtn" class="secondary" type="button">Download PDF</button>
+              <button id="retakeBtn" class="secondary" type="button">Retake</button>
+            </div>
+
+
+          </div>
+        </section>
+
+      </div>
+      
+      <div class="footer">
+        Made by Shin
+      </div>
+    </div>
+  </div>
+
+  <!-- html2pdf for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <script>
+  // --- Questions (24)
+  var QUESTIONS = [
+    ['Easy-going, Agreeable','Trusting, Believing in others','Adventurous, Risk taker','Tolerant, Respectful'],
+    ['Soft spoken, Reserved','Optimistic, Visionary','Center of attention, Sociable','Peacemaker, Bring harmony'],
+    ['Encourage others','Strive for perfection','Be part of the team','Want to establish goals'],
+    ['Become frustrated','Keep my feelings inside','Tell my side of the story','Stand up to opposition'],
+    ['Lively, Talkative','Fast paced, Determined','Try to maintain balance','Try to follow the rules'],
+    ['Manage time efficiently','Often rushed, Feel pressured','Social things are important','Like to finish what I start'],
+    ['Resist sudden change','Tend to over promise','Withdraw under pressure','Not afraid to fight'],
+    ['A good encourager','A good listener','A good analyzer','A good delegator'],
+    ['Results are what matter','Do it right, Accuracy counts','Make it enjoyable','Do it together'],
+    ['Will do without, Self-controlled','Will buy on impulse','Will wait, No pressure','Will spend on what I want'],
+    ['Friendly, Easy to be with','Unique, Bored by routine','Actively change things','Want things exact'],
+    ['Non-confrontational, Giving in','Overloaded with details','Changes at the last minute','Demanding, Abrupt'],
+    ['Want advancement','Satisfied with things, Content','Openly display feelings','Humble, Modest'],
+    ['Cool, Reserved','Happy, Carefree','Pleasing, Kind','Bold, Daring'],
+    ['Spend quality time with others','Plan for the future, Be prepared','Travel to new adventures','Receive rewards for goals met'],
+    ['Rules need to be challenged','Rules make it fair','Rules make it boring','Rules make it safe'],
+    ['Education, Culture','Achievements, Awards','Safety, Security','Social, Group Gatherings'],
+    ['Take charge, Direct approach','Outgoing, Enthusiastic','Predictable, Consistent','Cautious, Careful'],
+    ['Not easily defeated','Will do as told, Follows leader','Excitable, Cheerful','Want things orderly, Neat'],
+    ['I will lead them','I will follow through','I will persuade them','I will get the facts'],
+    ['Think of others first','Competitive, Like a challenge','Optimistic, Positive','Logical thinker, Systematic'],
+    ['Please others, Agreeable','Laugh out loud, Animated','Courageous, Bold','Quiet, Reserved'],
+    ['Want more authority','Want new opportunities','Avoid any conflict','Want clear directions'],
+    ['Reliable, Dependable','Creative, Unique','Bottom line, Results oriented','Hold high standards, Accurate']
+  ];
+
+  // --- Dual mappings (null = *) ---
+  var mapMost = [
+    ['S','I',null,'C'],
+    ['C','D',null,'S'],
+    ['I',null,null,'D'],
+    ['C','S',null,'D'],
+    ['I','D','S',null],
+    ['C','D','I','S'],
+    ['S','I',null,null],
+    ['I','S','C','D'],
+    ['D','C',null,null],
+    [null,'D','S','I'],
+    ['S',null,'D','C'],
+    [null,'C','I','D'],
+    ['D','S','I',null],
+    ['C','I','S','D'],
+    ['S','C','I','D'],
+    [null,'C','I','S'],
+    [null,'D','S','I'],
+    ['D',null,null,'C'],
+    ['D','S','I',null],
+    ['D','S','I','C'],
+    ['S','D','I',null],
+    ['S',null,'D','C'],
+    [null,'I','S',null],
+    [null,'S','D','C']
+  ];
+
+  var mapLeast = [
+    ['S','I','D','C'],
+    [null,'D','I','S'],
+    ['I','C','S',null],
+    ['C','S','I','D'],
+    [null,'D','S','C'],
+    [null,'D','I','S'],
+    [null,'I','C','D'],
+    ['I','S','C','D'],
+    ['D','C','I','S'],
+    ['C','D','S',null],
+    [null,'I','D','C'],
+    ['S',null,'I','D'],
+    ['D',null,null,'C'],
+    ['C','I',null,'D'],
+    ['S',null,'I','D'],
+    ['D',null,'I','S'],
+    ['C','D','S',null],
+    ['D','I','S',null],
+    ['D',null,'I','C'],
+    [null,'S','I',null],
+    ['S','D','I','C'],
+    ['S','I','D','C'],
+    ['D',null,'S','C'],
+    ['I','S',null,null]
+  ];
+
+  // --- State & elements ---
+  var cur = 0;
+  var answers = {}; // answers[q] = {most: idx, least: idx}
+  for(var i=0;i<24;i++){ answers[i] = {most:null, least:null}; }
+
+  var startBtn, intro, quiz, results, backBtn, prevBtn, nextBtn, qwrap, bar, introErr, quizErr, downloadBtn, retakeBtn, backToIntroFromResults, testBtn, quizHeader;
+
+  // Auto-fill date
+  function setDefaultDate() {
+    var dateEl = document.getElementById('date');
+    if(dateEl && !dateEl.value){
+      var d = new Date(); 
+      dateEl.value = d.toISOString().slice(0,10);
+    }
+    // ensure date cannot be changed (defensive)
+    if(dateEl) dateEl.disabled = true;
+  }
+
+  // Initialize elements and events
+  function initializeElements() {
+    startBtn = document.getElementById('startBtn');
+    intro = document.getElementById('intro');
+    quiz = document.getElementById('quiz');
+    results = document.getElementById('results');
+    backBtn = document.getElementById('backBtn');
+    prevBtn = document.getElementById('prevBtn');
+    nextBtn = document.getElementById('nextBtn');
+    qwrap = document.getElementById('qwrap');
+    bar = document.getElementById('bar');
+    introErr = document.getElementById('introErr');
+    quizErr = document.getElementById('quizErr');
+    downloadBtn = document.getElementById('downloadBtn');
+    retakeBtn = document.getElementById('retakeBtn');
+    backToIntroFromResults = document.getElementById('backToIntroFromResults');
+    testBtn = document.getElementById('testBtn');
+    quizHeader = document.getElementById('quizHeader');
+
+    // Attach event listeners
+    if(startBtn){
+      startBtn.addEventListener('click', function(){ showQuiz(); });
+      startBtn.addEventListener('keydown', function(e){ if(e.key==='Enter' || e.key===' ') showQuiz(); });
+    }
+
+    if(backBtn){ backBtn.addEventListener('click', function(){ showIntro(); }); }
+    if(prevBtn){ prevBtn.addEventListener('click', prevQuestion); }
+    if(nextBtn){ nextBtn.addEventListener('click', nextQuestion); }
+    if(retakeBtn){ retakeBtn.addEventListener('click', retakeQuiz); }
+    if(backToIntroFromResults){ backToIntroFromResults.addEventListener('click', function(){ showIntro(); }); }
+    if(testBtn){ testBtn.addEventListener('click', runSampleTest); }
+
+    console.log('Elements initialized');
+  }
+
+  // Wait for DOM to be ready
+  document.addEventListener('DOMContentLoaded', function(){
+    setDefaultDate();
+    initializeElements();
+    showIntro();
+  });
+
+  // UI functions
+  function showIntro(){
+    if(intro) intro.classList.remove('hidden');
+    if(quiz) quiz.classList.add('hidden');
+    if(results) results.classList.add('hidden');
+    hideErr('intro');
+  }
+
+  function showQuiz(){
+    // Validate required fields before showing quiz
+    var name = document.getElementById('name').value.trim();
+    var org = document.getElementById('org').value.trim();
+    
+    if(!name || !org ){
+      var missingFields = [];
+      if(!name) missingFields.push('Name');
+      if(!org) missingFields.push('Organisation');
+      
+      showErr('Please fill in all required fields: ' + missingFields.join(', '), 'intro');
+      return;
+    }
+    
+    if(intro) intro.classList.add('hidden');
+    if(quiz) quiz.classList.remove('hidden');
+    if(results) results.classList.add('hidden');
+    renderQuestion(cur);
+    updateNav();
+    updateProgress();
+    hideErr('quiz');
+  }
+
+  function showResults(report){
+    // Get elements fresh
+    var who = document.getElementById('who');
+    var grid = document.getElementById('grid');
+    var domTitle = document.getElementById('domTitle');
+    var desc = document.getElementById('desc');
+    var naturalSummary = document.getElementById('naturalSummary');
+
+    // Read raw inputs and compute fallbacks
+    var rawName = (document.getElementById('name') && document.getElementById('name').value.trim()) || '';
+    var rawOrg = (document.getElementById('org') && document.getElementById('org').value.trim()) || '';
+    var rawDate = (document.getElementById('date') && document.getElementById('date').value.trim()) || '';
+    var displayName = rawName !== '' ? rawName : 'Luke Skywalker';
+    var displayOrg = rawOrg !== '' ? rawOrg : 'Jedi';
+    var displayDate = rawDate !== '' ? rawDate : new Date().toISOString().slice(0,10);
+
+    // Find dominant style
+    var order = ['D','I','S','C'];
+    var dom = order.slice().sort(function(a,b){ return report.c[b] - report.c[a]; })[0];
+
+    // Populate report-card disabled fields (results)
+    var rn = document.getElementById('resultName');
+    var ro = document.getElementById('resultOrg');
+    var rd = document.getElementById('resultDate');
+    if(rn) rn.value = displayName;
+    if(ro) ro.value = displayOrg;
+    if(rd) rd.value = displayDate;
+
+    // keep a minimal who (or blank) for compatibility / screen readers
+    if(who) who.textContent = '';
+
+    if(domTitle) domTitle.textContent = 'Your Dominant Style: ' + fullName(dom) + ' (' + dom + ')';
+    if(desc) desc.innerHTML = '<p style="margin-top:8px;line-height:1.6">' + descriptionText(dom) + '</p>';
+
+    // Single combined natural-language summary (NO raw numeric breakdown)
+    if(naturalSummary){
+      naturalSummary.textContent = 
+        fullName(dom) + ': ' + descriptionText(dom) + ' Use this snapshot as a quick cue for how you typically take action, influence others, prefer stability, and approach accuracy.';
+    }
+
+    // Build a compact results table (tidy, font governed by .score-table)
+    if(grid){
+      grid.innerHTML = '';
+      var table = document.createElement('table');
+      table.className = 'score-table';
+      var headerRow = document.createElement('tr');
+      ['','D','I','S','C','★'].forEach(function(h){
+        var th = document.createElement('th');
+        th.textContent = h;
+        headerRow.appendChild(th);
+      });
+      table.appendChild(headerRow);
+
+      // MOST row
+      var mostRow = document.createElement('tr');
+      var mostLabel = document.createElement('td'); mostLabel.textContent = 'Most'; mostLabel.style.fontWeight='700';
+      mostRow.appendChild(mostLabel);
+      ['D','I','S','C'].forEach(function(k){ var td=document.createElement('td'); td.textContent=report.m[k]; td.style.fontWeight='700'; mostRow.appendChild(td); });
+      var mostStar = document.createElement('td'); mostStar.textContent = 24 - (report.m.D+report.m.I+report.m.S+report.m.C); mostRow.appendChild(mostStar);
+      table.appendChild(mostRow);
+
+      // LEAST row
+      var leastRow = document.createElement('tr');
+      var leastLabel = document.createElement('td'); leastLabel.textContent = 'Least'; leastLabel.style.fontWeight='700'; leastRow.appendChild(leastLabel);
+      ['D','I','S','C'].forEach(function(k){ var td=document.createElement('td'); td.textContent=report.l[k]; td.style.fontWeight='700'; leastRow.appendChild(td); });
+      var leastStar = document.createElement('td'); leastStar.textContent = 24 - (report.l.D+report.l.I+report.l.S+report.l.C); leastRow.appendChild(leastStar);
+      table.appendChild(leastRow);
+
+      // CHANGE row
+      var changeRow = document.createElement('tr');
+      var changeLabel = document.createElement('td'); changeLabel.textContent = 'Change'; changeLabel.style.fontWeight='700'; changeRow.appendChild(changeLabel);
+      ['D','I','S','C'].forEach(function(k){ var td=document.createElement('td'); td.textContent = (report.c[k]>=0?'+':'') + report.c[k]; if(k===dom){ td.style.background='#fff'; } changeRow.appendChild(td); });
+      var empty = document.createElement('td'); changeRow.appendChild(empty);
+      table.appendChild(changeRow);
+
+      grid.appendChild(table);
+    }
+
+    // Attach download button (use displayName so fallback shows in filename)
+    if(downloadBtn){
+      downloadBtn.onclick = function(){
+        var element = document.getElementById('report');
+        var fname = 'DISC_Report_' + sanitizeFilename(displayName || 'Anon') + '_' + displayDate + '.pdf';
+        var opt = {
+          margin: 10,
+          filename: fname,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        if(window.html2pdf) {
+          window.html2pdf().from(element).set(opt).save();
+        } else {
+          alert('PDF library not loaded. Please refresh and try again.');
+        }
+      };
+    }
+
+    if(quiz) quiz.classList.add('hidden');
+    if(intro) intro.classList.add('hidden');
+    if(results) { results.classList.remove('hidden'); results.style.display = 'block'; }
+    hideErr('quiz');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function renderQuestion(qIdx){
+    if(!qwrap) return;
+    
+    qwrap.innerHTML = '';
+    var card = document.createElement('div');
+    card.className = 'qcard';
+    var header = document.createElement('div');
+    header.className = 'qtitle';
+    header.textContent = 'Question ' + (qIdx+1) + ' of 24 — pick ONE MOST and ONE LEAST';
+    card.appendChild(header);
+
+    var table = document.createElement('div');
+    table.style.display = 'grid';
+    table.style.gridTemplateColumns = 'auto 1fr 1fr';
+    table.style.gap = '8px';
+    table.style.alignItems = 'center';
+    table.style.marginTop = '16px';
+
+    var emptyHeader = document.createElement('div'); table.appendChild(emptyHeader);
+    var mostHeader = document.createElement('div'); mostHeader.style.fontWeight='700'; mostHeader.style.textAlign='center'; mostHeader.style.padding='8px'; mostHeader.style.backgroundColor='#f8fafc'; mostHeader.style.border='1px solid var(--border)'; mostHeader.style.borderRadius='6px'; mostHeader.textContent='M'; table.appendChild(mostHeader);
+    var leastHeader = document.createElement('div'); leastHeader.style.fontWeight='700'; leastHeader.style.textAlign='center'; leastHeader.style.padding='8px'; leastHeader.style.backgroundColor='#f8fafc'; leastHeader.style.border='1px solid var(--border)'; leastHeader.style.borderRadius='6px'; leastHeader.textContent='L'; table.appendChild(leastHeader);
+
+    QUESTIONS[qIdx].forEach(function(txt, idx){
+      var questionText = document.createElement('div');
+      questionText.style.padding = '12px 8px';
+      questionText.style.fontSize = '0.95rem';
+      questionText.textContent = txt;
+      table.appendChild(questionText);
+
+      var mostOpt = document.createElement('div');
+      mostOpt.style.display = 'flex';
+      mostOpt.style.justifyContent = 'center';
+      mostOpt.style.alignItems = 'center';
+      mostOpt.style.padding = '12px';
+      mostOpt.style.cursor = 'pointer';
+      mostOpt.style.borderRadius = '6px';
+      mostOpt.style.border = '1px solid var(--border)';
+      /* selected background handled below */
+      var mostCircle = document.createElement('div');
+      mostCircle.style.width = '20px';
+      mostCircle.style.height = '20px';
+      mostCircle.style.borderRadius = '50%';
+      mostCircle.style.border = '2px solid #1DA1F2';
+      mostCircle.style.backgroundColor = answers[qIdx].most === idx ? '#1DA1F2' : 'transparent';
+      mostOpt.appendChild(mostCircle);
+      /* light blue highlight when selected */
+      mostOpt.style.backgroundColor = (answers[qIdx].most === idx) ? '#e6f2ff' : '#fff';
+      mostOpt.onclick = function(){ selectAnswer(qIdx, 'most', idx); };
+      table.appendChild(mostOpt);
+
+      var leastOpt = document.createElement('div');
+      leastOpt.style.display = 'flex';
+      leastOpt.style.justifyContent = 'center';
+      leastOpt.style.alignItems = 'center';
+      leastOpt.style.padding = '12px';
+      leastOpt.style.cursor = 'pointer';
+      leastOpt.style.borderRadius = '6px';
+      leastOpt.style.border = '1px solid var(--border)';
+      /* selected background handled below */
+      var leastCircle = document.createElement('div');
+      leastCircle.style.width = '20px';
+      leastCircle.style.height = '20px';
+      leastCircle.style.borderRadius = '50%';
+      leastCircle.style.border = '2px solid #1DA1F2';
+      leastCircle.style.backgroundColor = answers[qIdx].least === idx ? '#1DA1F2' : 'transparent';
+      leastOpt.appendChild(leastCircle);
+      /* light blue highlight when selected */
+      leastOpt.style.backgroundColor = (answers[qIdx].least === idx) ? '#e6f2ff' : '#fff';
+      leastOpt.onclick = function(){ selectAnswer(qIdx, 'least', idx); };
+      table.appendChild(leastOpt);
+    });
+
+    card.appendChild(table);
+    qwrap.appendChild(card);
+  }
+
+  function selectAnswer(q, side, idx){
+    var other = (side === 'most') ? 'least' : 'most';
+    if(answers[q][other] === idx){
+      showErr('You cannot pick the same option for MOST and LEAST.', 'quiz');
+      return;
+    }
+    answers[q][side] = idx;
+    renderQuestion(q);
+    updateProgress();
+    updateNav();
+  }
+
+  function updateProgress(){
+    if(!bar) return;
+    var filled = 0;
+    for(var i=0;i<24;i++){
+      if(answers[i].most != null && answers[i].least != null) filled++;
+    }
+    bar.style.width = (filled/24*100) + '%';
+  }
+
+  function updateNav(){
+    if(!prevBtn || !nextBtn) return;
+    prevBtn.disabled = (cur === 0);
+    nextBtn.textContent = (cur === 23) ? 'Calculate Results' : 'Next';
+    console.log('Nav update - Q', cur+1, 'Most=', answers[cur].most, 'Least=', answers[cur].least);
+  }
+
+  function prevQuestion(){
+    if(cur > 0){
+      cur--;
+      renderQuestion(cur);
+      updateNav();
+    }
+  }
+
+  function nextQuestion(){
+    if(answers[cur].most == null && answers[cur].least == null){
+      showErr('Please select both MOST and LEAST options for this question.', 'quiz');
+      return;
+    }
+    if(answers[cur].most == null){
+      showErr('Please select a MOST option for this question.', 'quiz');
+      return;
+    }
+    if(answers[cur].least == null){
+      showErr('Please select a LEAST option for this question.', 'quiz');
+      return;
+    }
+    if(answers[cur].most === answers[cur].least){
+      showErr('MOST and LEAST cannot be the same option.', 'quiz');
+      return;
+    }
+    if(cur === 23){
+      calculateResults();
+    } else {
+      cur++;
+      renderQuestion(cur);
+      updateNav();
+    }
+  }
+
+  function calculateResults(){
+    for(var i=0;i<24;i++){
+      if(answers[i].most == null || answers[i].least == null){
+        showErr('Please complete question ' + (i+1), 'quiz');
+        cur = i;
+        renderQuestion(cur);
+        updateNav();
+        return;
+      }
+    }
+    var m = {D:0,I:0,S:0,C:0}, l = {D:0,I:0,S:0,C:0};
+    for(var q=0;q<24;q++){
+      var mi = answers[q].most, li = answers[q].least;
+      var ml = mapMost[q][mi], ll = mapLeast[q][li];
+      if(ml) m[ml]++;
+      if(ll) l[ll]++;
+      console.log('Q'+(q+1)+': M->', ml, ' L->', ll);
+    }
+    var c = {D:m.D - l.D, I:m.I - l.I, S:m.S - l.S, C:m.C - l.C};
+    showResults({m:m,l:l,c:c});
+  }
+
+  // showErr now supports a target: 'intro' | 'quiz'
+  function showErr(msg, target){
+    console.log('showErr', target, msg);
+    var el = (target === 'intro') ? introErr : quizErr;
+    if(!el) el = (target === 'intro') ? introErr : quizErr;
+    if(el){
+      el.style.display = 'block';
+      el.textContent = msg;
+      try { el.scrollIntoView({behavior:'smooth', block:'center'}); } catch(e){}
+      setTimeout(function(){ if(el) el.style.display='none'; }, 4000);
+    } else {
+      alert(msg);
+    }
+  }
+
+  function hideErr(target){
+    if(target === 'intro' && introErr){ introErr.style.display='none'; introErr.textContent=''; }
+    if(target === 'quiz' && quizErr){ quizErr.style.display='none'; quizErr.textContent=''; }
+  }
+
+  function fullName(k){
+    return {'D':'Dominance','I':'Influence','S':'Steadiness','C':'Conscientiousness'}[k] || k;
+  }
+
+  function descriptionText(k){
+    var texts = {
+      D: 'Direct, decisive, and results-focused. You prefer clear goals, ownership, and fast decisions. Watch-outs: impatience with details or slower paces; build in time to listen and consider alternatives.',
+      I: 'Outgoing, optimistic, and persuasive. You energize groups, build relationships, and spark ideas. Watch-outs: over-commitment and follow-through; add structure and checkpoints.',
+      S: 'Calm, reliable, and supportive. You create stability and trust, and you\'re at your best in cooperative, predictable environments. Watch-outs: avoiding conflict or change.',
+      C: 'Precise, analytical, and quality-driven. You value accuracy, preparation, and well-defined processes. Watch-outs: over-analyzing or delaying decisions.'
+    };
+    return texts[k] || '';
+  }
+
+  function sanitizeFilename(s){
+    return (s||'Anon').replace(/[^a-z0-9_\\-]+/gi,'_');
+  }
+
+  function retakeQuiz(){
+    for(var i=0;i<24;i++){ answers[i] = {most:null, least:null}; }
+    cur = 0;
+
+    // clear intro fields per your request (return to first page with everything cleared)
+    var nameEl = document.getElementById('name');
+    var orgEl = document.getElementById('org');
+    var dateEl = document.getElementById('date');
+    if(nameEl) nameEl.value = '';
+    if(orgEl) orgEl.value = '';
+    // reset date back to today's date and keep it disabled
+    if(dateEl) dateEl.value = new Date().toISOString().slice(0,10);
+
+    // clear result disabled fields too
+    var rn = document.getElementById('resultName');
+    var ro = document.getElementById('resultOrg');
+    var rd = document.getElementById('resultDate');
+    if(rn) rn.value = '';
+    if(ro) ro.value = '';
+    if(rd) rd.value = '';
+
+    // show only intro (do not show merged intro+quiz)
+    if(quiz) quiz.classList.add('hidden');
+    if(results) results.classList.add('hidden');
+    if(intro) intro.classList.remove('hidden');
+
+    // render question state ready for new attempt (kept for consistency)
+    renderQuestion(cur);
+    updateNav();
+    updateProgress();
+    hideErr('intro');
+  }
+
+  function runSampleTest(){
+    // quick sample set — you can customize
+    var sampleAnswers = [
+      {most:0,least:2},{most:1,least:2},{most:0,least:1},{most:2,least:3},{most:0,least:3},
+      {most:3,least:2},{most:2,least:1},{most:1,least:2},{most:3,least:0},{most:3,least:0},
+      {most:1,least:0},{most:2,least:0},{most:1,least:0},{most:3,least:0},{most:1,least:0},
+      {most:2,least:3},{most:3,least:0},{most:3,least:0},{most:2,least:0},{most:2,least:3},
+      {most:2,least:0},{most:2,least:0},{most:3,least:1},{most:1,least:3}
+    ];
+    for(var i=0;i<24;i++){ answers[i] = sampleAnswers[i]; }
+    calculateResults();
+  }
+
+  </script>
+</body>
+</html>
