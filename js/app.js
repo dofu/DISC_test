@@ -275,58 +275,85 @@ function showResults(report) {
     grid.appendChild(table);
   }
 
-  // Setup PDF download with improved error handling
+  // Minimal PDF download for debugging
   if(downloadBtn) {
     downloadBtn.onclick = async () => {
       try {
+        console.log('Starting PDF generation...');
         downloadBtn.disabled = true;
-        downloadBtn.textContent = 'Generating PDF...';
+        downloadBtn.textContent = 'Generating...';
 
-        const reportElement = document.getElementById('report');
-        if(!reportElement) throw new Error('No report element found');
-
-        // Check if html2pdf is available
+        // Check if html2pdf exists
         if (typeof window.html2pdf === 'undefined') {
-          console.log('html2pdf not available, using print');
+          console.error('html2pdf not loaded');
           window.print();
           return;
         }
 
-        const filename = `DISC_Report_${sanitizeFilename(displayName)}_${displayDate}.pdf`;
+        const reportElement = document.getElementById('report');
+        console.log('Report element found:', !!reportElement);
         
-        // Simple PDF generation - use the report element directly
+        if (!reportElement) {
+          console.error('No report element');
+          return;
+        }
+
+        // Remove gradient styling before PDF generation
+        const gradientElements = reportElement.querySelectorAll('.gradient-text');
+        const originalStyles = [];
+        
+        gradientElements.forEach((el, index) => {
+          // Store original styles
+          originalStyles[index] = {
+            background: el.style.background,
+            webkitBackgroundClip: el.style.webkitBackgroundClip,
+            webkitTextFillColor: el.style.webkitTextFillColor,
+            color: el.style.color
+          };
+          
+          // Apply plain black styling
+          el.style.background = 'none';
+          el.style.webkitBackgroundClip = 'unset';
+          el.style.webkitTextFillColor = 'unset';
+          el.style.color = 'black';
+        });
+
+        const filename = `DISC_Report_${Date.now()}.pdf`;
+        console.log('Filename:', filename);
+
+        // Minimal options with adjusted positioning
         const options = {
           margin: 0.5,
           filename: filename,
-          image: { 
-            type: 'jpeg', 
-            quality: 0.95 
-          },
           html2canvas: { 
-            scale: 1,
+            scale: 0.8,
+            y: 0,
+            scrollY: 0,
             useCORS: true,
             allowTaint: true,
-            logging: false,
-            letterRendering: true
+            logging: true
           },
           jsPDF: { 
             unit: 'in', 
-            format: 'letter', 
-            orientation: 'portrait'
+            format: 'letter'
           }
         };
 
-        // Generate PDF directly from the report element
-        await window.html2pdf().set(options).from(reportElement).save();
-        
-        console.log('PDF generated successfully');
+        console.log('Starting html2pdf...');
+        await window.html2pdf().from(reportElement).set(options).save();
+        console.log('PDF generation complete');
+
+        // Restore original gradient styles
+        gradientElements.forEach((el, index) => {
+          el.style.background = originalStyles[index].background;
+          el.style.webkitBackgroundClip = originalStyles[index].webkitBackgroundClip;
+          el.style.webkitTextFillColor = originalStyles[index].webkitTextFillColor;
+          el.style.color = originalStyles[index].color;
+        });
 
       } catch(error) {
-        console.error('PDF generation failed:', error);
-        
-        // Fallback to browser print
-        window.print();
-        
+        console.error('PDF Error:', error);
+        alert('PDF generation failed. Check console for details.');
       } finally {
         downloadBtn.disabled = false;
         downloadBtn.textContent = 'Download PDF';
