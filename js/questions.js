@@ -96,13 +96,125 @@ function fullName(k) {
 
 function descriptionText(k) {
   const texts = {
-    D: 'You are driven by results and achievements. You thrive in competitive environments and prefer to take charge of situations. You make quick decisions, embrace challenges, and focus on the bottom line. You value efficiency and direct communication.<br><br><strong>Strengths:</strong> Decisive leadership, problem-solving, goal-oriented, confident, takes initiative.<br><br><strong>Areas for Growth:</strong> May appear impatient or insensitive, could benefit from slowing down to consider others\' perspectives and building consensus.',
+    D: `
+      <div class="disc-summary">
+        <div class="style-overview">
+          <h4>Overview</h4>
+          <p>You are direct, results-oriented leaders who thrive on challenges and making quick decisions. You prefer environments where you can take control, solve problems, and drive toward goals efficiently. You value competence, achievement, and getting things done.</p>
+        </div>
+        
+        <div class="strengths-section">
+          <h4>Key Strengths</h4>
+          <ul>
+            <li><strong>Decisive Leadership:</strong> Makes quick, confident decisions even under pressure</li>
+            <li><strong>Results-Focused:</strong> Drives toward goals with determination and persistence</li>
+            <li><strong>Problem-Solving:</strong> Tackles challenges head-on with innovative solutions</li>
+            <li><strong>Direct Communication:</strong> Clear, straightforward, and efficient in interactions</li>
+            <li>Maintains focus on objectives and bottom-line results</li>
+          </ul>
+        </div>
+        
+        <div class="growth-section">
+          <h4>Areas for Development</h4>
+          <ul>
+            <li><strong>Patience with Others:</strong> May need to slow down to consider different perspectives</li>
+            <li><strong>Collaborative Approach:</strong> Could benefit from involving others in decision-making</li>
+            <li><strong>Attention to Details:</strong> May overlook important specifics in pursuit of quick results</li>
+            <li><strong>Emotional Sensitivity:</strong> Could improve awareness of impact on others' feelings</li>
+          </ul>
+        </div>
+      </div>
+    `,
     
-    I: 'You are enthusiastic and people-oriented. You excel at motivating others and creating positive team dynamics. You enjoy collaboration, networking, and inspiring others toward shared goals. You bring energy and optimism to any situation.<br><br><strong>Strengths:</strong> Excellent communicator, persuasive, builds relationships easily, optimistic, creative problem-solving.<br><br><strong>Areas for Growth:</strong> May struggle with follow-through on details, could benefit from better time management and maintaining focus on tasks.',
+    I: `
+      <div class="disc-summary">
+        <div class="style-overview">
+          <h4>Overview</h4>
+          <p>You are enthusiastic, people-focused communicators who excel at inspiring and motivating others. You thrive in social environments, enjoy building relationships, and prefer collaborative approaches to achieving goals. You value recognition, social interaction, and positive team dynamics.</p>
+        </div>
+
+        <div class="strengths-section">
+          <h4>Key Strengths</h4>
+          <ul>
+            <li><strong>Persuasive Communication:</strong> Naturally influences and inspires others with enthusiasm</li>
+            <li><strong>Relationship Building:</strong> Creates strong connections and networks easily</li>
+            <li><strong>Team Motivation:</strong> Energizes groups and builds positive team spirit</li>
+            <li><strong>Creative Problem-Solving:</strong> Generates innovative ideas through brainstorming</li>
+            <li><strong>Optimistic Outlook:</strong> Maintains positive attitude and sees opportunities</li>
+          </ul>
+        </div>
+        
+        <div class="growth-section">
+          <h4>Areas for Development</h4>
+          <ul>
+            <li><strong>Follow-Through:</strong> May need systems to ensure task completion</li>
+            <li><strong>Time Management:</strong> Could benefit from better prioritization and scheduling</li>
+            <li><strong>Attention to Detail:</strong> May need to focus more on accuracy and specifics</li>
+            <li><strong>Realistic Planning:</strong> Could improve at setting achievable timelines</li>
+          </ul>
+        </div>
+      </div>
+    `,
     
-    S: 'You value stability and cooperation. You excel at supporting others and creating harmonious environments. You prefer predictable routines and take time to consider decisions carefully. You are known for your reliability and loyalty.<br><br><strong>Strengths:</strong> Team player, patient listener, dependable, supportive, creates stability.<br><br><strong>Areas for Growth:</strong> May avoid necessary conflicts or changes, could benefit from being more assertive and adapting to new situations more quickly.',
+    S: `
+      <div class="disc-summary">
+        <div class="style-overview">
+          <h4>Overview</h4>
+          <p>You are reliable, patient team players who value stability and cooperation. You excel at supporting others, maintaining harmony, and creating consistent, dependable results. You prefer predictable environments and collaborative decision-making processes.</p>
+        </div>
+      
+        <div class="strengths-section">
+          <h4>Key Strengths</h4>
+          <ul>
+            <li><strong>Reliable Support:</strong> Consistently delivers dependable results and assistance</li>
+            <li><strong>Patient Listening:</strong> Provides thoughtful attention to others' needs and concerns</li>
+            <li><strong>Team Collaboration:</strong> Works well with others and builds consensus</li>
+            <li><strong>Steady Performance:</strong> Maintains consistent quality and effort over time</li>
+            <li><strong>Loyalty & Commitment:</strong> Demonstrates strong dedication to team and organization</li>
+          </ul>
+        </div>
+        
+        <div class="growth-section">
+          <h4>Areas for Development</h4>
+          <ul>
+            <li><strong>Assertiveness:</strong> Could benefit from expressing opinions and needs more directly</li>
+            <li><strong>Change Adaptation:</strong> May need support when facing rapid or unexpected changes</li>
+            <li><strong>Decision Speed:</strong> Could work on making decisions more quickly when needed</li>
+            <li><strong>Conflict Resolution:</strong> May need to address issues directly rather than avoiding them</li>
+          </ul>
+        </div>
+      </div>
+    `,
     
-    C: 'You focus on accuracy and quality. You excel at analyzing information, following procedures, and maintaining high standards. You prefer to work systematically and ensure tasks are completed correctly. You value expertise and competence.<br><br><strong>Strengths:</strong> Detail-oriented, analytical thinking, high quality work, systematic approach, thorough planning.<br><br><strong>Areas for Growth:</strong> May get caught up in perfectionism or over-analysis, could benefit from making decisions more quickly and being more flexible with standards.'
+    C: `
+      <div class="disc-summary">
+        <div class="style-overview">
+          <h4>Overview</h4>
+          <p>You are analytical, detail-oriented professionals who focus on accuracy and quality. You excel at systematic thinking, thorough analysis, and maintaining high standards. You value expertise, precision, and well-researched solutions.</p>
+        </div>
+        
+        <div class="strengths-section">
+          <h4>Key Strengths</h4>
+          <ul>
+            <li><strong>Analytical Thinking:</strong> Thoroughly examines data and considers multiple perspectives</li>
+            <li><strong>Quality Focus:</strong> Maintains high standards and attention to detail</li>
+            <li><strong>Systematic Approach:</strong> Creates organized, methodical processes and procedures</li>
+            <li><strong>Risk Assessment:</strong> Identifies potential problems and develops contingency plans</li>
+            <li><strong>Technical Expertise:</strong> Develops deep knowledge and competence in specialized areas</li>
+          </ul>
+        </div>
+        
+        <div class="growth-section">
+          <h4>Areas for Development</h4>
+          <ul>
+            <li><strong>Decision Timing:</strong> May need to make decisions with incomplete information</li>
+            <li><strong>Flexibility:</strong> Could benefit from adapting standards when perfection isn't required</li>
+            <li><strong>Delegation:</strong> May need to trust others to maintain quality standards</li>
+            <li><strong>Communication Style:</strong> Could work on explaining complex ideas more simply</li>
+          </ul>
+        </div>
+      </div>
+    `
   };
   return texts[k] || '';
 }

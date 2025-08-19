@@ -18,6 +18,16 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+
+}
+
+
+
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
 }
 
 body {
@@ -27,6 +37,12 @@ body {
   line-height: 1.6;
 }
 
+ul {
+  list-style-type: none;
+}
+h4 {
+  padding: 21px 0 5px 0;
+}
 .wrap {
   max-width: 800px;
   margin: 0 auto;
@@ -56,6 +72,7 @@ header h1 {
 
 .content {
   padding: 18px;
+  margin: 0;
 }
 
 .grid-2 {
@@ -90,15 +107,6 @@ header h1 {
   -webkit-text-fill-color: transparent;
   background-size: 200% 200%;
   animation: gradientShift 3s ease-in-out infinite;
-}
-
-/* Fallback for PDF generation - disable gradients */
-.html2canvas-container .gradient-text,
-.html2pdf__container .gradient-text {
-  background: none !important;
-  -webkit-text-fill-color: #4285f4 !important;
-  color: #4285f4 !important;
-  animation: none !important;
 }
 
 @keyframes gradientShift {
@@ -326,6 +334,12 @@ button {
   margin-top: 12px;
 }
 
+
+
+#grid {
+  width: 100%;
+}
+
 .rcard {
   background: #fff;
   padding: 12px;
@@ -362,9 +376,11 @@ button {
   border: 1px solid var(--border);
   padding: 10px;
   border-radius: 8px;
-  font-size: large;
 }
 
+#results {
+
+}
 .score-table {
   width: 100%;
   border-collapse: collapse;
@@ -387,79 +403,6 @@ button {
 
 .score-table th {
   background: #f8fafc;
-}
-
-#report {
-  width: 100%;
-  max-width: none;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-/* PDF-specific styling */
-@media print {
-  #report {
-    width: 100% !important;
-    max-width: none !important;
-    overflow: visible !important;
-    height: auto !important;
-    page-break-inside: avoid;
-  }
-  
-  .score-table {
-    width: 100% !important;
-    table-layout: fixed !important;
-    page-break-inside: avoid;
-  }
-  
-  .report-card {
-    width: 100% !important;
-    overflow: visible !important;
-    page-break-inside: avoid;
-  }
-}
-
-/* Additional styles for html2canvas rendering */
-.html2canvas-container #report,
-.html2pdf__container #report {
-  width: 100% !important;
-  max-width: none !important;
-  overflow: visible !important;
-  height: auto !important;
-  box-shadow: none !important;
-  display: block !important;
-  visibility: visible !important;
-}
-
-.html2canvas-container .score-table,
-.html2pdf__container .score-table {
-  width: 100% !important;
-  table-layout: fixed !important;
-}
-
-.html2canvas-container .report-card,
-.html2pdf__container .report-card {
-  width: 100% !important;
-  overflow: visible !important;
-}
-
-/* Ensure description is visible in PDF */
-.html2canvas-container #desc,
-.html2pdf__container #desc {
-  display: block !important;
-  visibility: visible !important;
-}
-
-/* Better font rendering for PDF */
-.html2canvas-container,
-.html2pdf__container {
-  font-family: 'Arial', sans-serif !important;
-}
-
-.html2canvas-container *,
-.html2pdf__container * {
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
 }
 
 #naturalSummary {
@@ -546,7 +489,7 @@ button {
 }
 
 .option-circle.selected::after {
-  content: '✓';
+  content: 'Ã¢Å""';
   color: white;
   font-size: 12px;
   font-weight: bold;
@@ -597,6 +540,9 @@ button {
   border: 1px solid #bfdbfe;
 }
 
+
+
+/* Mobile responsiveness */
 @media (max-width: 720px) {
   .wrap {
     padding: 24px 16px;
@@ -659,9 +605,7 @@ button {
     padding: 24px;
   }
 
-  .score-grid {
-    grid-template-columns: 1fr 1fr;
-  }
+
 
   .actions {
     justify-content: stretch;
@@ -670,5 +614,45 @@ button {
 
   .actions button {
     width: 100%;
+  
+
+  /* === PDF-SPECIFIC STYLES === */
+.report-container {
+  width: 210mm; /* A4 width */
+  min-height: 297mm; /* A4 height */
+  margin: 0 auto;
+  padding: 18mm; /* Standard A4 printable margin */
+  background: white;
+  box-sizing: border-box;
+  box-shadow: none;
+  border: none;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+/* Hide this container normally; only show when generating PDF */
+#report.hidden-for-screen {
+  display: none;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
   }
+  #report, #report * {
+    visibility: visible;
+  }
+  #report {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 18mm;
+  }
+}
+
+
+
 }

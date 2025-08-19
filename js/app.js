@@ -184,49 +184,50 @@ function showResults(report) {
     downloadBtn.onclick = async () => {
       try {
         downloadBtn.disabled = true;
-        downloadBtn.textContent = 'Generating...';
+        downloadBtn.textContent = 'Generating PDF...';
 
         const reportElement = document.getElementById('report');
-        if(!reportElement) throw new Error('No report section found');
-
-        // Show results section
-        if(quiz) quiz.classList.add('hidden');
-        if(intro) intro.classList.add('hidden');
-        if(results) results.classList.remove('hidden');
-
-        await new Promise(resolve => setTimeout(resolve, 200));
+        if(!reportElement) throw new Error('No report element found');
 
         // Check if html2pdf is available
         if (typeof window.html2pdf === 'undefined') {
-          setTimeout(() => window.print(), 500);
+          console.log('html2pdf not available, using print');
+          window.print();
           return;
         }
 
-        const fname = 'DISC_Report_' + sanitizeFilename(displayName || 'User') + '_' + displayDate + '.pdf';
+        const filename = `DISC_Report_${sanitizeFilename(displayName)}_${displayDate}.pdf`;
         
-        const opt = {
-          margin: [10, 10, 10, 10],
-          filename: fname,
-          image: { type: 'jpeg', quality: 0.98 },
+        const options = {
+          margin: 0.5,
+          filename: filename,
+          image: { 
+            type: 'jpeg', 
+            quality: 0.98 
+          },
           html2canvas: { 
             scale: 2,
             useCORS: true,
-            backgroundColor: '#ffffff',
+            allowTaint: true,
             logging: false,
             letterRendering: true
           },
           jsPDF: { 
-            unit: 'mm', 
-            format: 'a4', 
+            unit: 'in', 
+            format: 'letter', 
             orientation: 'portrait'
           }
         };
 
-        await window.html2pdf().set(opt).from(reportElement).save();
+        // Generate PDF - save exactly as it appears on screen
+        await window.html2pdf().set(options).from(reportElement).save();
+        
+        console.log('PDF generated successfully');
 
-      } catch(err) {
-        console.error('PDF generation error:', err);
-        setTimeout(() => window.print(), 1000);
+      } catch(error) {
+        console.error('PDF generation failed:', error);
+        // Fallback to browser print
+        window.print();
         
       } finally {
         downloadBtn.disabled = false;
@@ -255,7 +256,7 @@ function renderQuestion(qIdx) {
   
   const header = document.createElement('div');
   header.className = 'qtitle';
-  header.textContent = 'Question ' + (qIdx + 1) + ' of 24 – pick ONE MOST and ONE LEAST';
+  header.textContent = 'Question ' + (qIdx + 1) + ' of 24 — pick ONE MOST and ONE LEAST';
   card.appendChild(header);
 
   const table = document.createElement('div');
@@ -478,4 +479,20 @@ function runManualTest() {
     answers[i] = manualAnswers[i]; 
   }
   calculateResults();
+
+  async function generatePDF() {
+  const reportElement = document.getElementById("report");
+  const fname = "DISC_Report.pdf";
+
+  const opt = {
+    margin: 0,  // no big white borders
+    filename: fname,
+    image: { type: "jpeg", quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+    jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+  };
+
+  await window.html2pdf().set(opt).from(reportElement).save();
+}
+
 }
