@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>DISC – Dual Mapping (Fixed)</title>
+  <title>DISC — Dual Mapping (Fixed)</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -48,7 +48,7 @@
 
         <!-- Quiz screen -->
         <section id="quiz" class="hidden">
-          <h2 id="quizHeader" class="quiz-header">Assessment – Questions</h2>
+          <h2 id="quizHeader" class="quiz-header">Assessment — Questions</h2>
 
           <div class="quiz-progress-container">
             <button id="backBtn" class="secondary" type="button">Back to Intro</button>
@@ -70,8 +70,8 @@
         </section>
 
         <!-- Results -->
-        <section id="results" >
-          <div id="report" >
+        <section id="results" class="hidden">
+          <div id="report">
             <h2>DISC Personality Profile</h2>
 
             <div id="who" class="muted"></div>
@@ -87,9 +87,15 @@
                   <input id="resultOrg" type="text" disabled>
                 </div>
               </div>
-              <div class="field report-card-date">
-                <label for="resultDate" class="report-card-label">Assessment Date</label>
-                <input id="resultDate" type="text" disabled>
+              <div class="field report-card-fields">
+                <div>
+                  <label for="resultDate" class="report-card-label">Assessment Date</label>
+                  <input id="resultDate" type="text" disabled>
+                </div>
+                <div>
+                  <label for="resultTime" class="report-card-label">Time Spent (Minutes)</label>
+                  <input id="resultTime" type="text" disabled>
+                </div>
               </div>
             </div>
 

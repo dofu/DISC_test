@@ -3,6 +3,7 @@
 // State management
 let cur = 0;
 let answers = {};
+let startTime = null;
 for(let i = 0; i < 24; i++) { 
   answers[i] = {most: null, least: null}; 
 }
@@ -69,6 +70,9 @@ function showQuiz() {
     return;
   }
   
+  // Start timing the quiz
+  startTime = new Date();
+  
   if(intro) intro.classList.add('hidden');
   if(quiz) quiz.classList.remove('hidden');
   if(results) results.classList.add('hidden');
@@ -98,9 +102,18 @@ function showResults(report) {
   const rn = document.getElementById('resultName');
   const ro = document.getElementById('resultOrg');
   const rd = document.getElementById('resultDate');
+  const rt = document.getElementById('resultTime');
+  
   if(rn) rn.value = displayName;
   if(ro) ro.value = displayOrg;
   if(rd) rd.value = displayDate;
+  
+  // Calculate time spent
+  if(rt && startTime) {
+    const endTime = new Date();
+    const timeDiff = Math.round((endTime - startTime) / (1000 * 60)); // Convert to minutes
+    rt.value = timeDiff + ' min';
+  }
 
   if(who) who.textContent = '';
 
@@ -256,7 +269,7 @@ function renderQuestion(qIdx) {
   
   const header = document.createElement('div');
   header.className = 'qtitle';
-  header.textContent = 'Question ' + (qIdx + 1) + ' of 24 — pick ONE MOST(M) and ONE LEAST(L)';
+  header.textContent = 'Question ' + (qIdx + 1) + ' of 24 — pick ONE MOST and ONE LEAST';
   card.appendChild(header);
 
   const table = document.createElement('div');
@@ -410,12 +423,16 @@ function showErr(msg, target) {
   const el = (target === 'intro') ? introErr : quizErr;
   if(el) {
     el.classList.remove('hidden');
+    el.classList.add('block');
     el.textContent = msg;
     try { 
       el.scrollIntoView({behavior: 'smooth', block: 'center'}); 
     } catch(e) {}
     setTimeout(() => { 
-      if(el) el.classList.add('hidden'); 
+      if(el) {
+        el.classList.add('hidden');
+        el.classList.remove('block');
+      }
     }, 4000);
   } else {
     alert(msg);
@@ -425,10 +442,12 @@ function showErr(msg, target) {
 function hideErr(target) {
   if(target === 'intro' && introErr) { 
     introErr.classList.add('hidden'); 
+    introErr.classList.remove('block');
     introErr.textContent = ''; 
   }
   if(target === 'quiz' && quizErr) { 
     quizErr.classList.add('hidden'); 
+    quizErr.classList.remove('block');
     quizErr.textContent = ''; 
   }
 }
@@ -443,6 +462,7 @@ function retakeQuiz() {
     answers[i] = {most: null, least: null}; 
   }
   cur = 0;
+  startTime = null; // Reset timer
 
   const nameEl = document.getElementById('name');
   const orgEl = document.getElementById('org');
@@ -452,9 +472,11 @@ function retakeQuiz() {
   const rn = document.getElementById('resultName');
   const ro = document.getElementById('resultOrg');
   const rd = document.getElementById('resultDate');
+  const rt = document.getElementById('resultTime');
   if(rn) rn.value = '';
   if(ro) ro.value = '';
   if(rd) rd.value = '';
+  if(rt) rt.value = '';
 
   if(quiz) quiz.classList.add('hidden');
   if(results) results.classList.add('hidden');
@@ -479,20 +501,4 @@ function runManualTest() {
     answers[i] = manualAnswers[i]; 
   }
   calculateResults();
-
-  async function generatePDF() {
-  const reportElement = document.getElementById("report");
-  const fname = "DISC_Report.pdf";
-
-  const opt = {
-    margin: 0,  // no big white borders
-    filename: fname,
-    image: { type: "jpeg", quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
-    jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
-  };
-
-  await window.html2pdf().set(opt).from(reportElement).save();
-}
-
 }
