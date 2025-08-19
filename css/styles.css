@@ -489,7 +489,7 @@ button {
 }
 
 .option-circle.selected::after {
-  content: 'Ã¢Å""';
+  content: '✓';
   color: white;
   font-size: 12px;
   font-weight: bold;
@@ -540,7 +540,9 @@ button {
   border: 1px solid #bfdbfe;
 }
 
-
+ .primary {
+MAX-WIDTH: 240PX;
+  }
 
 /* Mobile responsiveness */
 @media (max-width: 720px) {
@@ -565,9 +567,9 @@ button {
     max-width: none;
   }
 
-  .secondary {
-    min-width: 150px;
-  }
+     .secondary {
+        min-width: 55px;
+    }
 
   .intro-section {
     max-width: none;

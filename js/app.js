@@ -256,7 +256,7 @@ function renderQuestion(qIdx) {
   
   const header = document.createElement('div');
   header.className = 'qtitle';
-  header.textContent = 'Question ' + (qIdx + 1) + ' of 24 — pick ONE MOST and ONE LEAST';
+  header.textContent = 'Question ' + (qIdx + 1) + ' of 24 — pick ONE MOST(M) and ONE LEAST(L)';
   card.appendChild(header);
 
   const table = document.createElement('div');
