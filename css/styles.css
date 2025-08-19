@@ -153,6 +153,26 @@ input[type="text"]:focus, input[type="date"]:focus {
   font-size: 16px;
 }
 
+/* Field validation styles */
+.field-error {
+  border-color: var(--red-text) !important;
+  background-color: var(--red-light) !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+}
+
+.field-error:focus {
+  border-color: var(--red-text) !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2) !important;
+}
+
+.field-error-message {
+  color: var(--red-text);
+  font-size: 0.875rem;
+  margin-top: 4px;
+  text-align: left;
+  font-weight: 500;
+}
+
 .help {
   color: var(--muted);
   margin-top: 10px;
@@ -749,23 +769,5 @@ button:active::before {
 
   .actions button {
     width: 100%;
-  }
-}
-
-/* PDF-Specific Styles */
-@media print {
-  body * {
-    visibility: hidden;
-  }
-  #report, #report * {
-    visibility: visible;
-  }
-  #report {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    margin: 0;
-    padding: 18mm;
   }
 }

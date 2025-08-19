@@ -41,6 +41,84 @@ function initializeElements() {
   if(nextBtn) nextBtn.addEventListener('click', nextQuestion);
   if(retakeBtn) retakeBtn.addEventListener('click', retakeQuiz);
   if(manualTestBtn) manualTestBtn.addEventListener('click', runManualTest);
+
+  // Add input validation listeners
+  const nameInput = document.getElementById('name');
+  const orgInput = document.getElementById('org');
+  
+  if(nameInput) {
+    nameInput.addEventListener('input', () => clearFieldError(nameInput));
+    nameInput.addEventListener('blur', () => validateField(nameInput, 'name'));
+  }
+  
+  if(orgInput) {
+    orgInput.addEventListener('input', () => clearFieldError(orgInput));
+    orgInput.addEventListener('blur', () => validateField(orgInput, 'organisation'));
+  }
+}
+
+// Field validation functions
+function validateField(input, fieldName) {
+  const value = input.value.trim();
+  let isValid = true;
+  let errorMessage = '';
+
+  if (!value) {
+    isValid = false;
+    errorMessage = `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} is required`;
+  } else if (value.length <= 2) {
+    isValid = false;
+    errorMessage = `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} must be more than 2 characters`;
+  } else if (/\d/.test(value)) {
+    isValid = false;
+    errorMessage = `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} cannot contain numbers`;
+  }
+
+  if (!isValid) {
+    highlightFieldError(input, errorMessage);
+  } else {
+    clearFieldError(input);
+  }
+
+  return isValid;
+}
+
+function highlightFieldError(input, message) {
+  // Add error class to input
+  input.classList.add('field-error');
+  
+  // Remove any existing error message
+  const existingError = input.parentNode.querySelector('.field-error-message');
+  if (existingError) {
+    existingError.remove();
+  }
+  
+  // Add error message
+  const errorDiv = document.createElement('div');
+  errorDiv.className = 'field-error-message';
+  errorDiv.textContent = message;
+  input.parentNode.appendChild(errorDiv);
+}
+
+function clearFieldError(input) {
+  // Remove error class
+  input.classList.remove('field-error');
+  
+  // Remove error message
+  const errorMessage = input.parentNode.querySelector('.field-error-message');
+  if (errorMessage) {
+    errorMessage.remove();
+  }
+}
+
+function validateAllFields() {
+  const nameInput = document.getElementById('name');
+  const orgInput = document.getElementById('org');
+  
+  const nameValid = validateField(nameInput, 'name');
+  const orgValid = validateField(orgInput, 'organisation');
+  
+  return nameValid && orgValid;
 }
 
 // Initialize when DOM is ready
@@ -55,18 +133,21 @@ function showIntro() {
   if(quiz) quiz.classList.add('hidden');
   if(results) results.classList.add('hidden');
   hideErr('intro');
+  
+  // Clear any field errors
+  const nameInput = document.getElementById('name');
+  const orgInput = document.getElementById('org');
+  if(nameInput) clearFieldError(nameInput);
+  if(orgInput) clearFieldError(orgInput);
 }
 
 function showQuiz() {
   const name = document.getElementById('name').value.trim();
   const org = document.getElementById('org').value.trim();
   
-  if(!name || !org) {
-    const missingFields = [];
-    if(!name) missingFields.push('Name');
-    if(!org) missingFields.push('Organisation');
-    
-    showErr('Please fill in all required fields: ' + missingFields.join(', '), 'intro');
+  // Validate all fields
+  if (!validateAllFields()) {
+    // Don't show the general error message, just rely on individual field errors
     return;
   }
   
@@ -194,7 +275,7 @@ function showResults(report) {
     grid.appendChild(table);
   }
 
-  // Setup PDF download
+  // Setup PDF download with improved error handling
   if(downloadBtn) {
     downloadBtn.onclick = async () => {
       try {
@@ -213,15 +294,16 @@ function showResults(report) {
 
         const filename = `DISC_Report_${sanitizeFilename(displayName)}_${displayDate}.pdf`;
         
+        // Simple PDF generation - use the report element directly
         const options = {
           margin: 0.5,
           filename: filename,
           image: { 
             type: 'jpeg', 
-            quality: 0.98 
+            quality: 0.95 
           },
           html2canvas: { 
-            scale: 2,
+            scale: 1,
             useCORS: true,
             allowTaint: true,
             logging: false,
@@ -234,13 +316,14 @@ function showResults(report) {
           }
         };
 
-        // Generate PDF - save exactly as it appears on screen
+        // Generate PDF directly from the report element
         await window.html2pdf().set(options).from(reportElement).save();
         
         console.log('PDF generated successfully');
 
       } catch(error) {
         console.error('PDF generation failed:', error);
+        
         // Fallback to browser print
         window.print();
         
@@ -271,7 +354,7 @@ function renderQuestion(qIdx) {
   
   const header = document.createElement('div');
   header.className = 'qtitle';
-  header.textContent = 'Question ' + (qIdx + 1) + ' of 24 — pick ONE MOST(M) and ONE LEAST(L)';
+  header.textContent = 'Question ' + (qIdx + 1) + ' of 24 – pick ONE MOST(M) and ONE LEAST(L)';
   card.appendChild(header);
 
   const table = document.createElement('div');
@@ -334,6 +417,7 @@ function selectAnswer(q, side, idx) {
   renderQuestion(q);
   updateProgress();
   updateNav();
+  hideErr('quiz');
 }
 
 // Progress and navigation
@@ -468,8 +552,14 @@ function retakeQuiz() {
 
   const nameEl = document.getElementById('name');
   const orgEl = document.getElementById('org');
-  if(nameEl) nameEl.value = '';
-  if(orgEl) orgEl.value = '';
+  if(nameEl) {
+    nameEl.value = '';
+    clearFieldError(nameEl);
+  }
+  if(orgEl) {
+    orgEl.value = '';
+    clearFieldError(orgEl);
+  }
 
   const rn = document.getElementById('resultName');
   const ro = document.getElementById('resultOrg');
@@ -491,6 +581,18 @@ function retakeQuiz() {
 }
 
 function runManualTest() {
+  // Set valid test data
+  const nameEl = document.getElementById('name');
+  const orgEl = document.getElementById('org');
+  if(nameEl) {
+    nameEl.value = 'John Doe';
+    clearFieldError(nameEl);
+  }
+  if(orgEl) {
+    orgEl.value = 'Test Organization';
+    clearFieldError(orgEl);
+  }
+
   const manualAnswers = [
     {most: 0, least: 2}, {most: 1, least: 2}, {most: 0, least: 1}, {most: 2, least: 3}, {most: 0, least: 3},
     {most: 3, least: 2}, {most: 2, least: 1}, {most: 0, least: 1}, {most: 2, least: 3}, {most: 0, least: 3},
