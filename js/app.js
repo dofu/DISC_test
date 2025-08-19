@@ -321,21 +321,28 @@ function showResults(report) {
         const filename = `DISC_Report_${Date.now()}.pdf`;
         console.log('Filename:', filename);
 
-        // Minimal options with adjusted positioning
+        // Enhanced options for sharp PDF
         const options = {
           margin: 0.5,
           filename: filename,
+          image: {
+            type: 'jpeg',
+            quality: 1.0
+          },
           html2canvas: { 
-            scale: 0.8,
+            scale: 2,
+            dpi: 300,
             y: 0,
             scrollY: 0,
             useCORS: true,
             allowTaint: true,
-            logging: true
+            logging: true,
+            letterRendering: true
           },
           jsPDF: { 
             unit: 'in', 
-            format: 'letter'
+            format: 'letter',
+            compress: false
           }
         };
 
@@ -381,7 +388,7 @@ function renderQuestion(qIdx) {
   
   const header = document.createElement('div');
   header.className = 'qtitle';
-  header.textContent = 'Question ' + (qIdx + 1) + ' of 24 – pick ONE MOST(M) and ONE LEAST(L)';
+  header.textContent = 'Question ' + (qIdx + 1) + ' of 24 – Pick one(1) for MOST(M) and LEAST(L)';
   card.appendChild(header);
 
   const table = document.createElement('div');

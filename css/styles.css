@@ -22,7 +22,7 @@
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: linear-gradient(321deg, #fafafa 20% 0%, #c8cbdb 100%);
+  background: linear-gradient(171deg, #f8fafc 0%, #bbc2ca 100%);
   background-attachment: fixed;
   background-size: 100% 100%;
   min-height: 100vh;
@@ -272,6 +272,9 @@ button {
   padding: 0.75rem;
   min-width: 3rem;
   font-size: 1.125rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .hidden {
@@ -331,6 +334,12 @@ button {
 
 .nav .primary {
   flex: 1;
+}
+
+.nav .chevron {
+  flex: 0 0 auto;
+  min-width: 3rem;
+  width: auto;
 }
 
 .quiz-header {
@@ -435,13 +444,23 @@ button {
 .report-card-fields {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  align-items: end;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.report-card-fields > div {
+  margin-bottom: 0;
+}
+
+.report-card-fields > div:nth-child(1),
+.report-card-fields > div:nth-child(2) {
+  margin-bottom: 1.5rem;
 }
 
 .report-card-label {
   display: block;
   margin-bottom: 0.5rem;
+  margin-top: 0;
   color: var(--muted);
   font-size: 0.875rem;
   font-weight: 500;
@@ -572,7 +591,16 @@ button {
 
   .report-card-fields {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: 1.5rem;
+  }
+  
+  .report-card-fields > div {
+    margin-bottom: 0;
+  }
+  
+  .report-card-fields > div:nth-child(1),
+  .report-card-fields > div:nth-child(2) {
+    margin-bottom: 0;
   }
 
   .actions {
@@ -591,12 +619,16 @@ button {
   }
 
   .nav {
-    flex-direction: column;
     gap: 0.75rem;
   }
-
-  .nav button {
-    width: 100%;
+  
+  .nav .primary {
+    flex: 1;
+  }
+  
+  .nav .chevron {
+    flex: 0 0 auto;
+    min-width: 3rem;
   }
 }
 
