@@ -65,7 +65,7 @@ header h1 {
 }
 
 .content {
-  padding: 18px;
+  padding: 50px;
 }
 
 .grid-2 {
@@ -94,11 +94,11 @@ header h1 {
 }
 
 .gradient-text {
-  background: linear-gradient(45deg, #4285f4, #34a853, #fbbc04, #ea4335);
+  background: linear-gradient(90deg, var(--brand), #8B5CF6, #EC4899, #F59E0B);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-size: 200% 200%;
+  background-size: 300% 100%;
   animation: gradientShift 3s ease-in-out infinite;
 }
 
@@ -231,6 +231,7 @@ button:active::before {
 }
 
 .primary:hover {
+  background: linear-gradient(90deg, #1A91DA, #1668A3);
   box-shadow: 0 1px 3px 1px rgba(29, 161, 242, 0.15);
 }
 

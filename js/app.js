@@ -111,8 +111,10 @@ function showResults(report) {
   // Calculate time spent
   if(rt && startTime) {
     const endTime = new Date();
-    const timeDiff = Math.round((endTime - startTime) / (1000 * 60)); // Convert to minutes
-    rt.value = timeDiff + ' min';
+    const timeDiffMs = endTime - startTime;
+    const minutes = Math.floor(timeDiffMs / (1000 * 60));
+    const seconds = Math.floor((timeDiffMs % (1000 * 60)) / 1000);
+    rt.value = `${minutes}m ${seconds}s`;
   }
 
   if(who) who.textContent = '';
@@ -269,7 +271,7 @@ function renderQuestion(qIdx) {
   
   const header = document.createElement('div');
   header.className = 'qtitle';
-  header.textContent = 'Question ' + (qIdx + 1) + ' of 24 — pick ONE MOST and ONE LEAST';
+  header.textContent = 'Question ' + (qIdx + 1) + ' of 24 — pick ONE MOST(M) and ONE LEAST(L)';
   card.appendChild(header);
 
   const table = document.createElement('div');
