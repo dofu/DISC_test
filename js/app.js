@@ -627,14 +627,40 @@ function runManualTest() {
     clearFieldError(orgEl);
   }
 
+  // This array is set so that after calculateResults, your DISC tally matches:
+  // Most:  D=4, I=2, S=5, C=6, ★=7
+  // Least: D=5, I=11, S=2, C=2, ★=4
+
+  // Each entry is `{most: index, least: index}` for the four options per question in your QUESTIONS array.
+  // You may need to adjust these indices if your QUESTIONS order changes.
   const manualAnswers = [
-    {most: 0, least: 2}, {most: 1, least: 2}, {most: 0, least: 1}, {most: 2, least: 3}, {most: 0, least: 3},
-    {most: 3, least: 2}, {most: 2, least: 1}, {most: 0, least: 1}, {most: 2, least: 3}, {most: 0, least: 3},
-    {most: 2, least: 1}, {most: 0, least: 2}, {most: 0, least: 2}, {most: 3, least: 0}, {most: 0, least: 3},
-    {most: 3, least: 2}, {most: 0, least: 3}, {most: 1, least: 2}, {most: 1, least: 2}, {most: 3, least: 2},
-    {most: 3, least: 2}, {most: 2, least: 3}, {most: 1, least: 3}, {most: 3, least: 1}
+    // Q1-Q24: indices chosen to create the desired tally
+    {most: 2, least: 0}, // S, D
+    {most: 0, least: 1}, // D, I
+    {most: 1, least: 3}, // I, C
+    {most: 3, least: 0}, // ★, D
+    {most: 3, least: 3}, // ★, ★
+    {most: 2, least: 1}, // S, I
+    {most: 3, least: 1}, // ★, I
+    {most: 3, least: 2}, // C, S
+    {most: 3, least: 2}, // C, S
+    {most: 3, least: 3}, // ★, ★
+    {most: 0, least: 1}, // D, I
+    {most: 3, least: 1}, // ★, I
+    {most: 0, least: 3}, // D, ★
+    {most: 2, least: 0}, // C, D
+    {most: 2, least: 0}, // S, D
+    {most: 2, least: 1}, // S, I
+    {most: 3, least: 3}, // ★, ★
+    {most: 0, least: 1}, // D, I
+    {most: 2, least: 1}, // S, I
+    {most: 3, least: 1}, // C, I
+    {most: 3, least: 1}, // ★, I
+    {most: 2, least: 0}, // C, D
+    {most: 1, least: 3}, // I, C
+    {most: 3, least: 1}  // C, I
   ];
-  
+
   for(let i = 0; i < 24; i++) { 
     answers[i] = manualAnswers[i]; 
   }
