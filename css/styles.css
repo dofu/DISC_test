@@ -557,31 +557,28 @@ button {
 }
 
 .pdf-fields {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 1rem;
-  padding: 1rem 1.25rem;
+  width: 100%;
+  border-collapse: collapse;
   margin-bottom: 1.5rem;
-  border: 1px solid var(--border);
-  border-radius: 0.5rem;
-  background: #fafafa;
+  font-size: 0.9375rem;
 }
 
-.pdf-field-label {
-  display: block;
-  margin-bottom: 0.35rem;
+.pdf-fields th,
+.pdf-fields td {
+  border: 1px solid var(--border);
+  padding: 0.6rem 0.75rem;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.pdf-fields th {
+  width: 12rem;
+  background: #f8fafc;
   color: var(--muted);
-  font-size: 0.8125rem;
   font-weight: 500;
 }
 
-.pdf-field-value {
-  border: 1px solid var(--border);
-  border-radius: 0.375rem;
-  background: #fff;
-  padding: 0.6rem 0.75rem;
-  min-height: 2.5rem;
-  font-size: 0.9375rem;
+.pdf-fields td {
   color: var(--ink);
 }
 

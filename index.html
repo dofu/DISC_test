@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=2026-10-27e">
 </head>
 <body>
   <div class="wrap">
@@ -91,20 +91,11 @@
           <div id="report">
             <div class="pdf-head">
               <h2 class="pdf-title">DISC Personality Profile</h2>
-              <div class="pdf-fields">
-                <div>
-                  <span class="pdf-field-label">Full Name</span>
-                  <div id="pdfName" class="pdf-field-value"></div>
-                </div>
-                <div>
-                  <span class="pdf-field-label">Organisation</span>
-                  <div id="pdfOrg" class="pdf-field-value"></div>
-                </div>
-                <div>
-                  <span class="pdf-field-label">Assessment Date</span>
-                  <div id="pdfDate" class="pdf-field-value"></div>
-                </div>
-              </div>
+              <table class="pdf-fields">
+                <tr><th scope="row">Full Name</th><td id="pdfName"></td></tr>
+                <tr><th scope="row">Organisation</th><td id="pdfOrg"></td></tr>
+                <tr><th scope="row">Assessment Date</th><td id="pdfDate"></td></tr>
+              </table>
             </div>
             <p id="who" class="report-meta"></p>
             <h2 id="domTitle" class="headline"></h2>
@@ -141,7 +132,7 @@
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <script src="js/questions.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/questions.js?v=2026-10-27e"></script>
+  <script src="js/app.js?v=2026-10-27e"></script>
 </body>
 </html>
