@@ -192,6 +192,12 @@ function showResults(report) {
 
   setWide(true);
   if(who) who.textContent = 'DISC profile · ' + displayName + ' · ' + displayOrg + ' · ' + displayDate;
+  const pdfName = document.getElementById('pdfName');
+  const pdfOrg = document.getElementById('pdfOrg');
+  const pdfDate = document.getElementById('pdfDate');
+  if(pdfName) pdfName.textContent = displayName;
+  if(pdfOrg) pdfOrg.textContent = displayOrg;
+  if(pdfDate) pdfDate.textContent = displayDate;
   if(domTitle) domTitle.innerHTML = 'Your style: ' + fullName(dom) + ' (' + dom + ')';
   if(overview) overview.innerHTML = overviewHtml(dom, 'you');
   if(sections) sections.innerHTML = sectionsHtml(dom);
@@ -332,6 +338,7 @@ function showResults(report) {
         // Pin the report to a fixed width so the PDF text size does not depend on the screen width
         reportElement.style.width = '720px';
         reportElement.style.maxWidth = '100%';
+        reportElement.classList.add('pdf-mode');
 
         const filename = `DISC_Report_${Date.now()}.pdf`;
         console.log('Filename:', filename);
@@ -358,6 +365,11 @@ function showResults(report) {
             unit: 'in', 
             format: 'letter',
             compress: false
+          },
+          // Keep the score blocks and the strengths/growth cards whole across pages
+          pagebreak: {
+            mode: ['css', 'legacy'],
+            avoid: ['.pdf-fields', '.score-bars', '.score-grid', '.style-sections', '.strengths-section', '.growth-section']
           }
         };
 
@@ -380,6 +392,7 @@ function showResults(report) {
         if(reportEl) {
           reportEl.style.width = '';
           reportEl.style.maxWidth = '';
+          reportEl.classList.remove('pdf-mode');
         }
         downloadBtn.disabled = false;
         downloadBtn.textContent = 'Download PDF';

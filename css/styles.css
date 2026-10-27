@@ -536,6 +536,55 @@ button {
 }
 
 /* Results page */
+/* Shown only while the PDF is being captured: title and boxed fields for HR */
+.pdf-head {
+  display: none;
+}
+
+#report.pdf-mode .pdf-head {
+  display: block;
+}
+
+#report.pdf-mode .report-meta {
+  display: none;
+}
+
+.pdf-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.75rem;
+}
+
+.pdf-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: #fafafa;
+}
+
+.pdf-field-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.pdf-field-value {
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  background: #fff;
+  padding: 0.6rem 0.75rem;
+  min-height: 2.5rem;
+  font-size: 0.9375rem;
+  color: var(--ink);
+}
+
 .report-meta {
   color: var(--muted);
   font-size: 0.8125rem;
