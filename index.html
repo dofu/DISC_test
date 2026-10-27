@@ -14,7 +14,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="min-h-screen">
+<body>
   <div class="wrap">
     <div class="card" role="application" aria-label="DISC quiz">
       
@@ -38,14 +38,14 @@
             </div>
 
             <div class="form-grid">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div class="form-fields">
                 <div>
-                  <label for="name" class="block mb-2 text-slate-500 text-sm text-left">Full Name</label>
-                  <input id="name" type="text" placeholder="Enter your full name" autocomplete="name" class="w-full p-3 rounded-xl border border-slate-200 bg-transparent text-base transition-all duration-200" />
+                  <label for="name">Full Name</label>
+                  <input id="name" type="text" placeholder="Enter your full name" autocomplete="name" />
                 </div>
                 <div>
-                  <label for="org" class="block mb-2 text-slate-500 text-sm text-left">Organisation</label>
-                  <input id="org" type="text" placeholder="Your Department" autocomplete="organization" class="w-full p-3 rounded-xl border border-slate-200 bg-transparent text-base transition-all duration-200" />
+                  <label for="org">Organisation</label>
+                  <input id="org" type="text" placeholder="Your Department" autocomplete="organization" />
                 </div>
               </div>
             </div>
@@ -53,7 +53,7 @@
             <div id="introErr" role="alert" class="error hidden"></div>
 
             <div class="tip">
-              <strong>Note:</strong> You can return to this screen later to edit your details. Your progress saved.
+              <strong>Note:</strong> You can come back here to change these details; your answers are kept until the page is reloaded.
             </div>
 
             <div class="actions">
@@ -89,7 +89,7 @@
         <!-- Results -->
         <section id="results" class="hidden">
           <div id="report">
-            <h2 class="text-2xl font-bold text-slate-900 text-center mb-4">DISC Personality Profile</h2>
+            <h2 class="results-title">DISC Personality Profile</h2>
 
             <div id="who" class="muted"></div>
 
@@ -97,19 +97,19 @@
               <div class="report-card-fields">
                 <div>
                   <label for="resultName" class="report-card-label">Full Name</label>
-                  <input id="resultName" type="text" disabled class="w-full p-3 bg-slate-100 border border-slate-200 rounded-lg text-slate-500 cursor-not-allowed">
+                  <input id="resultName" type="text" disabled>
                 </div>
                 <div>
                   <label for="resultOrg" class="report-card-label">Organisation</label>
-                  <input id="resultOrg" type="text" disabled class="w-full p-3 bg-slate-100 border border-slate-200 rounded-lg text-slate-500 cursor-not-allowed">
+                  <input id="resultOrg" type="text" disabled>
                 </div>
                 <div>
                   <label for="resultDate" class="report-card-label">Assessment Date</label>
-                  <input id="resultDate" type="text" disabled class="w-full p-3 bg-slate-100 border border-slate-200 rounded-lg text-slate-500 cursor-not-allowed">
+                  <input id="resultDate" type="text" disabled>
                 </div>
                 <div>
                   <label for="resultTime" class="report-card-label">Time Spent</label>
-                  <input id="resultTime" type="text" disabled class="w-full p-3 bg-slate-100 border border-slate-200 rounded-lg text-slate-500 cursor-not-allowed">
+                  <input id="resultTime" type="text" disabled>
                 </div>
               </div>
             </div>
@@ -120,7 +120,7 @@
             
             <p id="naturalSummary" class=""></p>
             
-            <h3 class="dominant-title">Your Score hahhahaa</h3>
+            <h3 class="dominant-title">Your Scores</h3>
             <div id="grid" class="score-grid"></div>
             
             <div class="actions">

@@ -106,29 +106,18 @@ header h1 {
 
 .form-grid {
   margin: 2rem 0;
-  gap: 1.5rem;
 }
 
-.grid {
+.form-fields {
   display: grid;
-}
-
-.grid-cols-1 {
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-}
-
-.md\\:grid-cols-2 {
-  grid-template-columns: repeat(1, minmax(0, 1fr));
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
 }
 
 @media (min-width: 768px) {
-  .md\\:grid-cols-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .form-fields {
+    grid-template-columns: 1fr 1fr;
   }
-}
-
-.gap-3 {
-  gap: 0.75rem;
 }
 
 label {
@@ -467,6 +456,7 @@ button {
 }
 
 .report-card input[disabled] {
+  cursor: not-allowed;
   background: #f1f5f9;
   border: 1px solid var(--border);
   padding: 0.75rem;
@@ -502,6 +492,13 @@ button {
   background: #f8fafc;
   font-weight: 600;
   color: var(--ink);
+}
+
+.results-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1rem;
 }
 
 .dominant-title {
@@ -583,10 +580,6 @@ button {
 
   .instructions p {
     font-size: 1rem;
-  }
-
-  .form-grid {
-    gap: 1rem;
   }
 
   .report-card-fields {
