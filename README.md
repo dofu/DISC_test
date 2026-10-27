@@ -11,6 +11,7 @@ https://dofu.github.io/DISC_test/
 - Detailed personality profile results
 - PDF report generation
 - Responsive design for mobile and desktop
+- Nothing is recorded or saved: no server, no storage, no analytics. Answers stay in the browser tab and the PDF is generated locally
 - Clean, modern UI with smooth animations
 
 ## DISC Types
