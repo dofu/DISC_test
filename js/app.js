@@ -620,7 +620,7 @@ function runManualTest() {
     clearFieldError(nameEl);
   }
   if(orgEl) {
-    orgEl.value = 'Test Organization';
+    orgEl.value = 'UX Department';
     clearFieldError(orgEl);
   }
 
