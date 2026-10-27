@@ -36,6 +36,18 @@ body {
   max-width: 48rem;
   margin: 0 auto;
   padding: 2rem 1rem;
+  transition: max-width 0.3s ease;
+}
+
+/* Results get more room; intro and quiz keep the reading width */
+.wrap.wide {
+  max-width: 60rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wrap {
+    transition: none;
+  }
 }
 
 .card {

@@ -127,8 +127,15 @@ document.addEventListener('DOMContentLoaded', () => {
   showIntro();
 });
 
+// Results use a wider column than the intro and quiz
+function setWide(on) {
+  const wrap = document.querySelector('.wrap');
+  if(wrap) wrap.classList.toggle('wide', !!on);
+}
+
 // Navigation functions
 function showIntro() {
+  setWide(false);
   if(intro) intro.classList.remove('hidden');
   if(quiz) quiz.classList.add('hidden');
   if(results) results.classList.add('hidden');
@@ -142,6 +149,7 @@ function showIntro() {
 }
 
 function showQuiz() {
+  setWide(false);
   const name = document.getElementById('name').value.trim();
   const org = document.getElementById('org').value.trim();
   
@@ -182,6 +190,7 @@ function showResults(report) {
   const dom = order.slice().sort((a,b) => report.c[b] - report.c[a])[0];
   const fmt = v => (v >= 0 ? '+' : '') + v;
 
+  setWide(true);
   if(who) who.textContent = 'DISC profile · ' + displayName + ' · ' + displayOrg + ' · ' + displayDate;
   if(domTitle) domTitle.innerHTML = 'Your style: ' + fullName(dom) + ' (' + dom + ')';
   if(overview) overview.innerHTML = overviewHtml(dom, 'you');
@@ -279,6 +288,7 @@ function showResults(report) {
   // Minimal PDF download for debugging
   if(downloadBtn) {
     downloadBtn.onclick = async () => {
+      const reportEl = document.getElementById('report');
       try {
         console.log('Starting PDF generation...');
         downloadBtn.disabled = true;
@@ -318,6 +328,10 @@ function showResults(report) {
           el.style.webkitTextFillColor = 'unset';
           el.style.color = 'black';
         });
+
+        // Pin the report to a fixed width so the PDF text size does not depend on the screen width
+        reportElement.style.width = '720px';
+        reportElement.style.maxWidth = '100%';
 
         const filename = `DISC_Report_${Date.now()}.pdf`;
         console.log('Filename:', filename);
@@ -363,6 +377,10 @@ function showResults(report) {
         console.error('PDF Error:', error);
         alert('PDF generation failed. Check console for details.');
       } finally {
+        if(reportEl) {
+          reportEl.style.width = '';
+          reportEl.style.maxWidth = '';
+        }
         downloadBtn.disabled = false;
         downloadBtn.textContent = 'Download PDF';
       }
@@ -601,6 +619,7 @@ function retakeQuiz() {
   if(sw) sw.innerHTML = '';
   if(ed) ed.innerHTML = '';
 
+  setWide(false);
   if(quiz) quiz.classList.add('hidden');
   if(results) results.classList.add('hidden');
   if(intro) intro.classList.remove('hidden');
