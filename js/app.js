@@ -660,7 +660,7 @@ function runManualTest() {
   const nameEl = document.getElementById('name');
   const orgEl = document.getElementById('org');
   if(nameEl) {
-    nameEl.value = 'John Doe';
+    nameEl.value = 'Godzilla Shin';
     clearFieldError(nameEl);
   }
   if(orgEl) {
@@ -674,30 +674,30 @@ function runManualTest() {
 
   // Each entry is `{most: index, least: index}` for the four options per question in your QUESTIONS array.
   // You may need to adjust these indices if your QUESTIONS order changes.
+  // Checked against mapMost/mapLeast on 2026-10-27; the letter comments are what each index maps to.
   const manualAnswers = [
-    // Q1-Q24: indices chosen to create the desired tally
-    {most: 2, least: 0}, // S, D
+    {most: 0, least: 2}, // S, D
+    {most: 1, least: 2}, // D, I
+    {most: 0, least: 1}, // I, C
+    {most: 2, least: 3}, // ★, D
+    {most: 3, least: 0}, // ★, ★
+    {most: 3, least: 2}, // S, I
+    {most: 2, least: 1}, // ★, I
+    {most: 2, least: 1}, // C, S
+    {most: 1, least: 3}, // C, S
+    {most: 0, least: 3}, // ★, ★
+    {most: 2, least: 1}, // D, I
+    {most: 0, least: 2}, // ★, I
+    {most: 0, least: 2}, // D, ★
+    {most: 0, least: 3}, // C, D
+    {most: 0, least: 3}, // S, D
+    {most: 3, least: 2}, // S, I
+    {most: 0, least: 3}, // ★, ★
     {most: 0, least: 1}, // D, I
-    {most: 1, least: 3}, // I, C
-    {most: 3, least: 0}, // ★, D
-    {most: 3, least: 3}, // ★, ★
-    {most: 2, least: 1}, // S, I
-    {most: 3, least: 1}, // ★, I
-    {most: 3, least: 2}, // C, S
-    {most: 3, least: 2}, // C, S
-    {most: 3, least: 3}, // ★, ★
-    {most: 0, least: 1}, // D, I
-    {most: 3, least: 1}, // ★, I
-    {most: 0, least: 3}, // D, ★
-    {most: 2, least: 0}, // C, D
-    {most: 2, least: 0}, // S, D
-    {most: 2, least: 1}, // S, I
-    {most: 3, least: 3}, // ★, ★
-    {most: 0, least: 1}, // D, I
-    {most: 2, least: 1}, // S, I
-    {most: 3, least: 1}, // C, I
-    {most: 3, least: 1}, // ★, I
-    {most: 2, least: 0}, // C, D
+    {most: 1, least: 2}, // S, I
+    {most: 3, least: 2}, // C, I
+    {most: 3, least: 2}, // ★, I
+    {most: 3, least: 2}, // C, D
     {most: 1, least: 3}, // I, C
     {most: 3, least: 1}  // C, I
   ];
