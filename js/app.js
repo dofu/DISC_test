@@ -275,6 +275,43 @@ function showResults(report) {
     grid.appendChild(table);
   }
 
+  // Other styles: chips ranked by this person's Change score, panel shows one style
+  const switchEl = document.getElementById('styleSwitch');
+  const exploreDesc = document.getElementById('exploreDesc');
+  if(switchEl && exploreDesc) {
+    const ranked = order.slice().sort((a,b) => report.c[b] - report.c[a]);
+    const names = {D: 'Dominance', I: 'Influence', S: 'Steadiness', C: 'Conscientiousness'};
+    const rankLabel = {0: 'Your style', 1: 'Second strongest', 2: 'Third strongest', 3: 'Least like you'};
+    const showStyle = (k) => {
+      switchEl.querySelectorAll('.style-chip').forEach(b => {
+        const on = b.dataset.style === k;
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      const tag = rankLabel[ranked.indexOf(k)];
+      exploreDesc.innerHTML =
+        '<h4 class="explore-title">' + fullName(k) + ' (' + k + ')' +
+        (tag ? ' <span class="explore-tag">' + tag + '</span>' : '') + '</h4>' +
+        descriptionText(k, k === dom ? 'you' : 'they');
+    };
+    switchEl.innerHTML = '';
+    ranked.forEach(k => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'style-chip';
+      b.dataset.style = k;
+      b.setAttribute('role', 'tab');
+      b.innerHTML =
+        '<span class="chip-letter">' + k + '</span>' +
+        '<span class="chip-name">' + names[k] + '</span>' +
+        '<span class="chip-score">' + (report.c[k] >= 0 ? '+' : '') + report.c[k] + '</span>' +
+        (k === dom ? '<span class="chip-you">Yours</span>' : '');
+      b.onclick = () => showStyle(k);
+      switchEl.appendChild(b);
+    });
+    showStyle(ranked[1]);
+  }
+
   // Minimal PDF download for debugging
   if(downloadBtn) {
     downloadBtn.onclick = async () => {
@@ -603,6 +640,10 @@ function retakeQuiz() {
   if(ro) ro.value = '';
   if(rd) rd.value = '';
   if(rt) rt.value = '';
+  const sw = document.getElementById('styleSwitch');
+  const ed = document.getElementById('exploreDesc');
+  if(sw) sw.innerHTML = '';
+  if(ed) ed.innerHTML = '';
 
   if(quiz) quiz.classList.add('hidden');
   if(results) results.classList.add('hidden');

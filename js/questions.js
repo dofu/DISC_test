@@ -94,13 +94,35 @@ function fullName(k) {
   }[k] || k;
 }
 
-function descriptionText(k) {
+// Overview paragraph per style, in second person for the reader's own style
+// and third person when browsing the other styles.
+const OVERVIEW = {
+  D: {
+    you: 'You are a direct, results-oriented leader who thrives on challenges and quick decisions. You prefer environments where you can take control, solve problems and drive toward goals efficiently. You value competence, achievement and getting things done.',
+    they: 'D-style people are direct, results-oriented leaders who thrive on challenges and quick decisions. They prefer environments where they can take control, solve problems and drive toward goals efficiently. They value competence, achievement and getting things done.'
+  },
+  I: {
+    you: 'You are an enthusiastic, people-focused communicator who excels at inspiring and motivating others. You thrive in social settings, enjoy building relationships and prefer collaborative ways of reaching goals. You value recognition, social interaction and positive team dynamics.',
+    they: 'I-style people are enthusiastic, people-focused communicators who excel at inspiring and motivating others. They thrive in social settings, enjoy building relationships and prefer collaborative ways of reaching goals. They value recognition, social interaction and positive team dynamics.'
+  },
+  S: {
+    you: 'You are a reliable, patient team player who values stability and cooperation. You excel at supporting others, keeping harmony and producing consistent, dependable results. You prefer predictable environments and collaborative decision-making.',
+    they: 'S-style people are reliable, patient team players who value stability and cooperation. They excel at supporting others, keeping harmony and producing consistent, dependable results. They prefer predictable environments and collaborative decision-making.'
+  },
+  C: {
+    you: 'You are an analytical, detail-oriented professional who focuses on accuracy and quality. You excel at systematic thinking, thorough analysis and high standards. You value expertise, precision and well-researched solutions.',
+    they: 'C-style people are analytical, detail-oriented professionals who focus on accuracy and quality. They excel at systematic thinking, thorough analysis and high standards. They value expertise, precision and well-researched solutions.'
+  }
+};
+
+function descriptionText(k, who) {
+  who = who === 'they' ? 'they' : 'you';
   const texts = {
     D: `
       <div class="disc-summary">
         <div class="style-overview">
           <h4>Overview</h4>
-          <p>You are direct, results-oriented leaders who thrive on challenges and making quick decisions. You prefer environments where you can take control, solve problems, and drive toward goals efficiently. You value competence, achievement, and getting things done.</p>
+          <p>${OVERVIEW.D[who]}</p>
         </div>
         
         <div class="strengths-section">
@@ -130,7 +152,7 @@ function descriptionText(k) {
       <div class="disc-summary">
         <div class="style-overview">
           <h4>Overview</h4>
-          <p>You are enthusiastic, people-focused communicators who excel at inspiring and motivating others. You thrive in social environments, enjoy building relationships, and prefer collaborative approaches to achieving goals. You value recognition, social interaction, and positive team dynamics.</p>
+          <p>${OVERVIEW.I[who]}</p>
         </div>
 
         <div class="strengths-section">
@@ -160,7 +182,7 @@ function descriptionText(k) {
       <div class="disc-summary">
         <div class="style-overview">
           <h4>Overview</h4>
-          <p>You are reliable, patient team players who value stability and cooperation. You excel at supporting others, maintaining harmony, and creating consistent, dependable results. You prefer predictable environments and collaborative decision-making processes.</p>
+          <p>${OVERVIEW.S[who]}</p>
         </div>
       
         <div class="strengths-section">
@@ -190,7 +212,7 @@ function descriptionText(k) {
       <div class="disc-summary">
         <div class="style-overview">
           <h4>Overview</h4>
-          <p>You are analytical, detail-oriented professionals who focus on accuracy and quality. You excel at systematic thinking, thorough analysis, and maintaining high standards. You value expertise, precision, and well-researched solutions.</p>
+          <p>${OVERVIEW.C[who]}</p>
         </div>
         
         <div class="strengths-section">
