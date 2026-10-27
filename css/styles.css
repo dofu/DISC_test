@@ -12,6 +12,14 @@
   --red-light: #fef2f2;
   --red-border: #fca5a5;
   --red-text: #dc2626;
+
+  /* Type scale: xs tags and pills, sm labels, tables and notes, base running text,
+     lg section titles, xl the one headline */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.75rem;
 }
 
 * {
@@ -110,7 +118,7 @@ header h1 {
 
 .instructions p {
   color: var(--muted);
-  font-size: 1.125rem;
+  font-size: var(--text-lg);
   line-height: 1.7;
   margin: 0 auto;
   max-width: 28rem;
@@ -136,7 +144,7 @@ label {
   display: block;
   margin-bottom: 0.5rem;
   color: var(--muted);
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 500;
   text-align: left;
 }
@@ -148,7 +156,7 @@ input[type="text"], input[type="date"] {
   border: 1px solid var(--border);
   background: #fff;
   font-family: inherit;
-  font-size: 1rem;
+  font-size: var(--text-base);
   transition: all 0.2s ease;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
@@ -177,7 +185,7 @@ input[type="text"]:focus, input[type="date"]:focus {
 
 .field-error-message {
   color: var(--red-text);
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   margin-top: 0.25rem;
   text-align: left;
   font-weight: 500;
@@ -190,7 +198,7 @@ input[type="text"]:focus, input[type="date"]:focus {
   background: var(--green-light);
   border: 1px solid #bbf7d0;
   color: #166534;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   text-align: left;
 }
 
@@ -201,7 +209,7 @@ input[type="text"]:focus, input[type="date"]:focus {
   background: var(--red-light);
   border: 1px solid var(--red-border);
   color: var(--red-text);
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   text-align: left;
 }
 
@@ -219,8 +227,8 @@ button {
   cursor: pointer;
   font-weight: 600;
   font-family: inherit;
-  font-size: 0.875rem;
   min-width: 7rem;
+  font-size: var(--text-sm);
   transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
@@ -274,7 +282,7 @@ button {
   text-align: center;
   padding: 1.5rem;
   color: var(--muted);
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   background: #fafafa;
   border-top: 1px solid var(--border);
 }
@@ -282,7 +290,7 @@ button {
 .chevron {
   padding: 0.75rem;
   min-width: 3rem;
-  font-size: 1.125rem;
+  font-size: var(--text-lg);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -388,12 +396,12 @@ button {
   border: 1px solid var(--border);
   border-radius: 0.375rem;
   color: var(--muted);
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
 }
 
 .question-text {
   padding: 0.75rem 0.5rem;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: var(--ink);
 }
 
@@ -438,7 +446,7 @@ button {
 .option-circle.selected::after {
   content: '✓';
   color: white;
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   font-weight: bold;
   position: absolute;
 }
@@ -447,7 +455,7 @@ button {
   width: 100%;
   border-collapse: collapse;
   margin-top: 1rem;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   border-radius: 0.5rem;
   overflow: hidden;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
@@ -472,13 +480,6 @@ button {
   color: var(--ink);
 }
 
-.dominant-title {
-  margin-top: 1.5rem;
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--ink);
-}
-
 /* DISC Summary Styles */
 .disc-summary {
   margin: 1.5rem 0;
@@ -488,16 +489,16 @@ button {
 .disc-summary h4,
 .style-sections h4 {
   color: var(--ink);
-  margin: 0 0 0.75rem 0;
-  font-size: 1.125rem;
+  margin: 0 0 0.5rem 0;
+  font-size: var(--text-base);
   font-weight: 600;
 }
 
 .style-overview {
   margin: 0 0 1rem 0;
   color: var(--ink);
+  font-size: var(--text-base);
   line-height: 1.7;
-  max-width: 40rem;
 }
 
 .disc-summary ul,
@@ -509,8 +510,10 @@ button {
 
 .disc-summary li,
 .style-sections li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
   color: var(--ink);
+  font-size: var(--text-sm);
+  line-height: 1.6;
 }
 
 .disc-summary li strong,
@@ -521,7 +524,7 @@ button {
 
 .strengths-section {
   background: #f0f9ff;
-  padding: 1.5rem;
+  padding: 1.25rem;
   border-radius: 0.75rem;
   margin: 1.5rem 0;
   border: 1px solid #bfdbfe;
@@ -529,7 +532,7 @@ button {
 
 .growth-section {
   background: #fefce8;
-  padding: 1.5rem;
+  padding: 1.25rem;
   border-radius: 0.75rem;
   margin: 1.5rem 0;
   border: 1px solid #fde047;
@@ -550,7 +553,7 @@ button {
 }
 
 .pdf-title {
-  font-size: 1.25rem;
+  font-size: var(--text-lg);
   font-weight: 700;
   color: var(--ink);
   margin-bottom: 0.75rem;
@@ -560,7 +563,7 @@ button {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 1.5rem;
-  font-size: 0.9375rem;
+  font-size: var(--text-sm);
 }
 
 .pdf-fields th,
@@ -584,13 +587,13 @@ button {
 
 .report-meta {
   color: var(--muted);
-  font-size: 0.8125rem;
+  font-size: var(--text-sm);
   letter-spacing: 0.02em;
   margin-bottom: 0.5rem;
 }
 
 .headline {
-  font-size: 1.75rem;
+  font-size: var(--text-xl);
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: -0.01em;
@@ -601,20 +604,47 @@ button {
 
 .section-title {
   margin-top: 2rem;
-  font-size: 1.125rem;
+  font-size: var(--text-lg);
   font-weight: 600;
   color: var(--ink);
 }
 
-.score-bars {
+.scores-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
   margin-top: 0.75rem;
+  align-items: start;
+}
+
+@media (min-width: 768px) {
+  .scores-row {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+#report.pdf-mode .scores-row {
+  grid-template-columns: 1fr;
+}
+
+.scores-row .score-table {
+  margin-top: 0;
+}
+
+.scores-row .score-table th,
+.scores-row .score-table td {
+  padding: 0.6rem 0.5rem;
+}
+
+.score-bars {
   display: grid;
   gap: 0.5rem;
 }
 
 .bar-row {
   display: grid;
-  grid-template-columns: 11.5rem minmax(0, 1fr) 3rem;
+  grid-template-columns: 10rem minmax(0, 1fr) 2.5rem;
   gap: 0.75rem;
   align-items: center;
 }
@@ -623,13 +653,14 @@ button {
   display: flex;
   gap: 0.5rem;
   align-items: baseline;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: var(--ink);
   min-width: 0;
 }
 
 .bar-letter {
   font-weight: 700;
+  font-size: var(--text-base);
   width: 1.25rem;
   flex: 0 0 auto;
 }
@@ -685,7 +716,7 @@ button {
 
 .bar-value {
   font-variant-numeric: tabular-nums;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   text-align: right;
   color: var(--ink);
 }
@@ -696,9 +727,8 @@ button {
 
 .chart-note {
   margin-top: 0.75rem;
-  font-size: 0.8125rem;
+  font-size: var(--text-sm);
   color: var(--muted);
-  max-width: 40rem;
 }
 
 .score-grid {
@@ -774,13 +804,13 @@ button {
 
 .chip-letter {
   font-weight: 700;
-  font-size: 1rem;
+  font-size: var(--text-base);
   width: 1.5rem;
   text-align: center;
 }
 
 .chip-name {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -789,11 +819,11 @@ button {
 .chip-score {
   font-variant-numeric: tabular-nums;
   color: var(--muted);
-  font-size: 0.8125rem;
+  font-size: var(--text-sm);
 }
 
 .chip-you {
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -805,8 +835,8 @@ button {
 
 .explore-title {
   margin-top: 1.25rem;
-  font-size: 1.125rem;
-  font-weight: 600;
+  font-size: var(--text-base);
+  font-weight: 700;
   color: var(--ink);
   display: flex;
   gap: 0.5rem;
@@ -815,7 +845,7 @@ button {
 }
 
 .explore-tag {
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   font-weight: 500;
   color: var(--muted);
   background: #f1f5f9;
@@ -839,7 +869,7 @@ button {
   }
 
   .instructions p {
-    font-size: 1rem;
+    font-size: var(--text-base);
   }
 
   .actions {

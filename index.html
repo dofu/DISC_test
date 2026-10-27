@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=2026-10-27e">
+  <link rel="stylesheet" href="css/styles.css?v=2026-10-27g">
 </head>
 <body>
   <div class="wrap">
@@ -102,15 +102,19 @@
             <div id="overview"></div>
 
             <h3 class="section-title">Your scores</h3>
-            <div id="chart" class="score-bars" aria-label="Change score per style"></div>
-            <p class="chart-note">Change is Most picks minus Least picks for each style. Below zero means you chose that style as least like you more often than most like you.</p>
-            <div id="grid" class="score-grid"></div>
+            <div class="scores-row">
+              <div class="scores-bars">
+                <div id="chart" class="score-bars" aria-label="Change score per style"></div>
+                <p class="chart-note">Change is Most picks minus Least picks for each style. Below zero means you chose that style as least like you more often than most like you.</p>
+              </div>
+              <div id="grid" class="score-grid"></div>
+            </div>
 
             <div id="sections"></div>
           </div>
 
           <div class="explore">
-            <h3 class="dominant-title">Other styles</h3>
+            <h3 class="section-title">Other styles</h3>
             <div id="styleSwitch" class="style-switch" role="tablist" aria-label="DISC styles"></div>
             <div id="exploreDesc" role="tabpanel"></div>
           </div>
@@ -132,7 +136,7 @@
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <script src="js/questions.js?v=2026-10-27e"></script>
-  <script src="js/app.js?v=2026-10-27e"></script>
+  <script src="js/questions.js?v=2026-10-27g"></script>
+  <script src="js/app.js?v=2026-10-27g"></script>
 </body>
 </html>
