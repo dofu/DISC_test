@@ -115,16 +115,10 @@ const OVERVIEW = {
   }
 };
 
-function descriptionText(k, who) {
-  who = who === 'they' ? 'they' : 'you';
-  const texts = {
+// Strengths and growth areas per style (markup shared by the result and the browser)
+const SECTIONS = {
     D: `
-      <div class="disc-summary">
-        <div class="style-overview">
-          <h4>Overview</h4>
-          <p>${OVERVIEW.D[who]}</p>
-        </div>
-        
+      <div class="style-sections">
         <div class="strengths-section">
           <h4>Key Strengths</h4>
           <ul>
@@ -149,12 +143,7 @@ function descriptionText(k, who) {
     `,
     
     I: `
-      <div class="disc-summary">
-        <div class="style-overview">
-          <h4>Overview</h4>
-          <p>${OVERVIEW.I[who]}</p>
-        </div>
-
+      <div class="style-sections">
         <div class="strengths-section">
           <h4>Key Strengths</h4>
           <ul>
@@ -179,12 +168,7 @@ function descriptionText(k, who) {
     `,
     
     S: `
-      <div class="disc-summary">
-        <div class="style-overview">
-          <h4>Overview</h4>
-          <p>${OVERVIEW.S[who]}</p>
-        </div>
-      
+      <div class="style-sections">
         <div class="strengths-section">
           <h4>Key Strengths</h4>
           <ul>
@@ -209,12 +193,7 @@ function descriptionText(k, who) {
     `,
     
     C: `
-      <div class="disc-summary">
-        <div class="style-overview">
-          <h4>Overview</h4>
-          <p>${OVERVIEW.C[who]}</p>
-        </div>
-        
+      <div class="style-sections">
         <div class="strengths-section">
           <h4>Key Strengths</h4>
           <ul>
@@ -237,6 +216,17 @@ function descriptionText(k, who) {
         </div>
       </div>
     `
-  };
-  return texts[k] || '';
+};
+
+function overviewHtml(k, who) {
+  who = who === 'they' ? 'they' : 'you';
+  return '<p class="style-overview">' + ((OVERVIEW[k] || {})[who] || '') + '</p>';
+}
+
+function sectionsHtml(k) {
+  return SECTIONS[k] || '';
+}
+
+function descriptionText(k, who) {
+  return '<div class="disc-summary">' + overviewHtml(k, who) + sectionsHtml(k) + '</div>';
 }

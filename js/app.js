@@ -165,113 +165,78 @@ function showQuiz() {
 
 function showResults(report) {
   const who = document.getElementById('who');
-  const grid = document.getElementById('grid');
   const domTitle = document.getElementById('domTitle');
-  const desc = document.getElementById('desc');
-  const naturalSummary = document.getElementById('naturalSummary');
+  const overview = document.getElementById('overview');
+  const chart = document.getElementById('chart');
+  const grid = document.getElementById('grid');
+  const sections = document.getElementById('sections');
 
   const rawName = (document.getElementById('name') && document.getElementById('name').value.trim()) || '';
   const rawOrg = (document.getElementById('org') && document.getElementById('org').value.trim()) || '';
   const displayName = rawName !== '' ? rawName : 'Luke Skywalker';
   const displayOrg = rawOrg !== '' ? rawOrg : 'Jedi';
-  const displayDate = new Date().toISOString().slice(0,10);
+  const displayDate = new Date().toLocaleDateString('en-GB', {day: 'numeric', month: 'short', year: 'numeric'});
 
   const order = ['D','I','S','C'];
+  const names = {D: 'Dominance', I: 'Influence', S: 'Steadiness', C: 'Conscientiousness'};
   const dom = order.slice().sort((a,b) => report.c[b] - report.c[a])[0];
+  const fmt = v => (v >= 0 ? '+' : '') + v;
 
-  // Populate report fields
-  const rn = document.getElementById('resultName');
-  const ro = document.getElementById('resultOrg');
-  const rd = document.getElementById('resultDate');
-  const rt = document.getElementById('resultTime');
-  
-  if(rn) rn.value = displayName;
-  if(ro) ro.value = displayOrg;
-  if(rd) rd.value = displayDate;
-  
-  // Calculate time spent
-  if(rt && startTime) {
-    const endTime = new Date();
-    const timeDiffMs = endTime - startTime;
-    const minutes = Math.floor(timeDiffMs / (1000 * 60));
-    const seconds = Math.floor((timeDiffMs % (1000 * 60)) / 1000);
-    rt.value = `${minutes}m ${seconds}s`;
+  if(who) who.textContent = 'DISC profile · ' + displayName + ' · ' + displayOrg + ' · ' + displayDate;
+  if(domTitle) domTitle.innerHTML = 'Your style: ' + fullName(dom) + ' (' + dom + ')';
+  if(overview) overview.innerHTML = overviewHtml(dom, 'you');
+  if(sections) sections.innerHTML = sectionsHtml(dom);
+
+  // Change-score bars: zero in the centre, one hue, the dominant style emphasised
+  if(chart) {
+    chart.innerHTML = '';
+    const limit = Math.max(8, ...order.map(k => Math.abs(report.c[k])));
+    order.forEach(k => {
+      const v = report.c[k];
+      const row = document.createElement('div');
+      row.className = 'bar-row' + (k === dom ? ' is-dominant' : '');
+      row.innerHTML =
+        '<div class="bar-label"><span class="bar-letter">' + k + '</span><span class="bar-name">' + names[k] + '</span></div>' +
+        '<div class="bar-track"><div class="bar-zero"></div>' +
+        '<div class="bar-fill ' + (v < 0 ? 'neg' : 'pos') + '" style="width:' + (Math.abs(v) / limit * 50) + '%"></div></div>' +
+        '<div class="bar-value">' + fmt(v) + '</div>';
+      chart.appendChild(row);
+    });
   }
 
-  if(who) who.textContent = '';
-
-  if(domTitle) domTitle.innerHTML = 'Your Dominant Style: ' + fullName(dom) + ' (' + dom + ')';
-  if(desc) desc.innerHTML = '<p>' + descriptionText(dom) + '</p>';
-
-  if(naturalSummary) {
-    naturalSummary.innerHTML = 
-      'Visit <a href="https://www.discprofile.com/disc-styles" target="_blank" style="color: var(--brand); text-decoration: none; font-weight: 600;">discprofile.com/disc-styles</a> to learn more about your DISC results and how to apply them in your work and relationships.';
-  }
-
-  // Build results table
+  // Most, Least and Change table
   if(grid) {
     grid.innerHTML = '';
     const table = document.createElement('table');
     table.className = 'score-table';
-    
+
     const headerRow = document.createElement('tr');
-    ['','D','I','S','C','★'].forEach(h => {
+    ['', 'D', 'I', 'S', 'C', '★ unscored'].forEach(h => {
       const th = document.createElement('th');
       th.textContent = h;
       headerRow.appendChild(th);
     });
     table.appendChild(headerRow);
 
-    // MOST row
-    const mostRow = document.createElement('tr');
-    const mostLabel = document.createElement('td'); 
-    mostLabel.textContent = 'Most'; 
-    mostLabel.style.fontWeight = '700';
-    mostRow.appendChild(mostLabel);
-    ['D','I','S','C'].forEach(k => { 
-      const td = document.createElement('td'); 
-      td.textContent = report.m[k]; 
-      td.style.fontWeight = '700'; 
-      mostRow.appendChild(td); 
-    });
-    const mostStar = document.createElement('td'); 
-    mostStar.textContent = 24 - (report.m.D + report.m.I + report.m.S + report.m.C); 
-    mostRow.appendChild(mostStar);
-    table.appendChild(mostRow);
-
-    // LEAST row
-    const leastRow = document.createElement('tr');
-    const leastLabel = document.createElement('td'); 
-    leastLabel.textContent = 'Least'; 
-    leastLabel.style.fontWeight = '700'; 
-    leastRow.appendChild(leastLabel);
-    ['D','I','S','C'].forEach(k => { 
-      const td = document.createElement('td'); 
-      td.textContent = report.l[k]; 
-      td.style.fontWeight = '700'; 
-      leastRow.appendChild(td); 
-    });
-    const leastStar = document.createElement('td'); 
-    leastStar.textContent = 24 - (report.l.D + report.l.I + report.l.S + report.l.C); 
-    leastRow.appendChild(leastStar);
-    table.appendChild(leastRow);
-
-    // CHANGE row
-    const changeRow = document.createElement('tr');
-    const changeLabel = document.createElement('td'); 
-    changeLabel.textContent = 'Change'; 
-    changeLabel.style.fontWeight = '700'; 
-    changeRow.appendChild(changeLabel);
-    ['D','I','S','C'].forEach(k => { 
-      const td = document.createElement('td'); 
-      td.textContent = (report.c[k] >= 0 ? '+' : '') + report.c[k]; 
-      if(k === dom) td.style.background = '#fff'; 
-      changeRow.appendChild(td); 
-    });
-    const empty = document.createElement('td'); 
-    changeRow.appendChild(empty);
-    table.appendChild(changeRow);
-
+    const addRow = (label, values, star, isChange) => {
+      const tr = document.createElement('tr');
+      const td0 = document.createElement('td');
+      td0.textContent = label;
+      tr.appendChild(td0);
+      order.forEach(k => {
+        const td = document.createElement('td');
+        td.textContent = isChange ? fmt(values[k]) : values[k];
+        if(isChange && k === dom) td.classList.add('is-dominant');
+        tr.appendChild(td);
+      });
+      const tdStar = document.createElement('td');
+      tdStar.textContent = star;
+      tr.appendChild(tdStar);
+      table.appendChild(tr);
+    };
+    addRow('Most', report.m, 24 - (report.m.D + report.m.I + report.m.S + report.m.C), false);
+    addRow('Least', report.l, 24 - (report.l.D + report.l.I + report.l.S + report.l.C), false);
+    addRow('Change', report.c, '', true);
     grid.appendChild(table);
   }
 
@@ -280,7 +245,6 @@ function showResults(report) {
   const exploreDesc = document.getElementById('exploreDesc');
   if(switchEl && exploreDesc) {
     const ranked = order.slice().sort((a,b) => report.c[b] - report.c[a]);
-    const names = {D: 'Dominance', I: 'Influence', S: 'Steadiness', C: 'Conscientiousness'};
     const rankLabel = {0: 'Your style', 1: 'Second strongest', 2: 'Third strongest', 3: 'Least like you'};
     const showStyle = (k) => {
       switchEl.querySelectorAll('.style-chip').forEach(b => {
@@ -632,14 +596,6 @@ function retakeQuiz() {
     clearFieldError(orgEl);
   }
 
-  const rn = document.getElementById('resultName');
-  const ro = document.getElementById('resultOrg');
-  const rd = document.getElementById('resultDate');
-  const rt = document.getElementById('resultTime');
-  if(rn) rn.value = '';
-  if(ro) ro.value = '';
-  if(rd) rd.value = '';
-  if(rt) rt.value = '';
   const sw = document.getElementById('styleSwitch');
   const ed = document.getElementById('exploreDesc');
   if(sw) sw.innerHTML = '';

@@ -89,39 +89,16 @@
         <!-- Results -->
         <section id="results" class="hidden">
           <div id="report">
-            <h2 class="results-title">DISC Personality Profile</h2>
+            <p id="who" class="report-meta"></p>
+            <h2 id="domTitle" class="headline"></h2>
+            <div id="overview"></div>
 
-            <div id="who" class="muted"></div>
-
-            <div class="report-card">
-              <div class="report-card-fields">
-                <div>
-                  <label for="resultName" class="report-card-label">Full Name</label>
-                  <input id="resultName" type="text" disabled>
-                </div>
-                <div>
-                  <label for="resultOrg" class="report-card-label">Organisation</label>
-                  <input id="resultOrg" type="text" disabled>
-                </div>
-                <div>
-                  <label for="resultDate" class="report-card-label">Assessment Date</label>
-                  <input id="resultDate" type="text" disabled>
-                </div>
-                <div>
-                  <label for="resultTime" class="report-card-label">Time Spent</label>
-                  <input id="resultTime" type="text" disabled>
-                </div>
-              </div>
-            </div>
-
-            <h3 id="domTitle" class="dominant-title"></h3>
-            
-            <div id="desc"></div>
-            
-            <p id="naturalSummary" class=""></p>
-            
-            <h3 class="dominant-title">Your Scores</h3>
+            <h3 class="section-title">Your scores</h3>
+            <div id="chart" class="score-bars" aria-label="Change score per style"></div>
+            <p class="chart-note">Change is Most picks minus Least picks for each style. Below zero means you chose that style as least like you more often than most like you.</p>
             <div id="grid" class="score-grid"></div>
+
+            <div id="sections"></div>
           </div>
 
           <div class="explore">
@@ -131,8 +108,8 @@
           </div>
 
           <div class="actions">
-            <button id="downloadBtn" class="secondary" type="button">Download PDF</button>
             <button id="retakeBtn" class="secondary" type="button">Retake</button>
+            <button id="downloadBtn" class="primary" type="button">Download PDF</button>
           </div>
 
           <div id="downloadStatus" class="download-status hidden"></div>
@@ -141,7 +118,7 @@
       </div>
       
       <div class="footer">
-        Vibed by Shin 2025
+        Vibed by Shin 2025 · <a href="https://www.discprofile.com/disc-styles" target="_blank" rel="noopener">More about the four DISC styles</a>
       </div>
     </div>
   </div>
