@@ -288,7 +288,7 @@ function showResults(report) {
       b.onclick = () => showStyle(k);
       switchEl.appendChild(b);
     });
-    showStyle(ranked[1]);
+    exploreDesc.innerHTML = '';
   }
 
   // Minimal PDF download for debugging
