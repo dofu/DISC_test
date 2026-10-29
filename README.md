@@ -2,7 +2,7 @@
 
 A web-based DISC personality assessment tool that helps users understand their personality style and work preferences.
 
-https://dofu.github.io/DISC_test/
+https://dofu.github.io/disc-test/
 
 ## Features
 
